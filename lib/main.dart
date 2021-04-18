@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'upload.dart';
-import 'login.dart';
 import 'aboutus.dart';
+import 'login.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
               toolbarHeight: 75,
             ),
             body: TabBarView(
-              children: [Upload(), Login(), AboutUs()],
+              children: [Upload(), LoginScreen(), AboutUs()],
             ),
           ),
         ),
@@ -46,3 +46,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
