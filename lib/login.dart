@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'signUp.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -97,6 +98,9 @@ class LoginState extends State<LoginScreen> {
                               ),
                               onPressed: () {
                                 //signup screen
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => SignUp()),
+                                );
                               },
                             )
                           ],
