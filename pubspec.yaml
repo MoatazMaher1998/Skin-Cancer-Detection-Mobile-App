@@ -34,6 +34,9 @@ dependencies:
   custom_radio_grouped_button: ^1.0.2
   image_picker: ^0.7.4
   google_sign_in: ^5.0.2
+  firebase_core: ^1.0.4
+  firebase_auth: ^1.1.1
+  cloud_firestore: ^1.0.6
 
 dev_dependencies:
   flutter_test:
