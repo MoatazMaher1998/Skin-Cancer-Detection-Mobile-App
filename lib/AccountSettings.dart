@@ -1,25 +1,25 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'NavigationDrawer.dart';
 import 'package:intl/intl.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
+import 'package:flutter/cupertino.dart';
 
-List<String> gender = ["Male", "Female"];
-
-class SignUp extends StatefulWidget {
+class AccountSettings extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return SignupState();
+    return EditSettingsState();
   }
 }
 
-class SignupState extends State<SignUp> {
-  DateTime selectedDate = DateTime.now();
+class EditSettingsState extends State<AccountSettings> {
 
+  DateTime selectedDate = DateTime.now();
   var _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newpasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController DOBController = TextEditingController();
   String genderController;
@@ -27,26 +27,20 @@ class SignupState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.teal,
-          elevation: 50,
-          title: Text("Go Back"),
-        ),
-        body: Form(
-            key: _formKey,
-            child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                    child: ListView(
+      appBar: AppBar(
+        title: Text('Account Settings'),
+        backgroundColor: Colors.teal,
+      ),
+      drawer: Drawer(child: MyDrawer() // Populate the Drawer in the next step.
+          ),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Container(
+                child: ListView(
                   shrinkWrap: true,
                   children: <Widget>[
-                    Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: Text(
-                          'Create an account',
-                          style: TextStyle(fontSize: 20),
-                        )),
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: TextFormField(
@@ -69,7 +63,7 @@ class SignupState extends State<SignUp> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (String value) {
                           bool emailValid = RegExp(
-                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                               .hasMatch(value);
                           if (!emailValid) {
                             return 'Please enter a valid e-mail address';
@@ -85,17 +79,33 @@ class SignupState extends State<SignUp> {
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: TextFormField(
                         obscureText: true,
-                        controller: passwordController,
+                        controller: oldPasswordController,
                         validator: (String value) {
                           if (value.isEmpty) {
-                            return 'Please enter a password';
+                            return 'Please enter your old password';
                           }
                         },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'Password',
+                          labelText: 'Old Password',
                         ),
                       ),
+                    ),
+                    Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: TextFormField(
+                    obscureText: true,
+                    controller: newpasswordController,
+                    validator: (String value) {
+                    if (value.isEmpty) {
+                    return 'Please enter your new password';
+                    }
+                    },
+                    decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'New Password',
+                    ),
+                    ),
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -106,7 +116,7 @@ class SignupState extends State<SignUp> {
                           if (value.isEmpty) {
                             return 'Please confirm your password';
                           }
-                          if (value != passwordController.text)
+                          if (value != newpasswordController.text)
                             return 'Passwords do not match';
                         },
                         decoration: InputDecoration(
@@ -184,12 +194,12 @@ class SignupState extends State<SignUp> {
                         child: RaisedButton(
                           textColor: Colors.white,
                           color: Colors.teal,
-                          child: Text('Sign Up'),
+                          child: Text('Save'),
                           onPressed: () {
                             setState(() {
                               if (_formKey.currentState.validate()) {
                                 debugPrint(
-                                    "SUCCESS + ${emailController.text} + ${nameController.text} + ${passwordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
+                                    "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
                               }
                             });
                           },
@@ -210,4 +220,6 @@ class SignupState extends State<SignUp> {
       });
     DOBController.text = DateFormat.yMMMd().format(selectedDate);
   }
+
+
 }
