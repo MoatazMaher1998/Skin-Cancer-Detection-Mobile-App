@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "669479875607",
+    "project_id": "skincancer-gp2021",
+    "storage_bucket": "skincancer-gp2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669479875607:android:a48a1226df81472cdbd852",
+        "android_client_info": {
+          "package_name": "com.example.skin_cancer_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669479875607-ogmg8d8p3mhr12ans0fbonlh22csa0eo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs5mtk9nUdQat1_NN0vX9L70qIoPMiDFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669479875607-ogmg8d8p3mhr12ans0fbonlh22csa0eo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

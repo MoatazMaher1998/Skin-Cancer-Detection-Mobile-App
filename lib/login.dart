@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:skin_cancer_app/dashboard.dart';
 import 'signUp.dart';
@@ -139,6 +140,7 @@ class LoginState extends State<LoginScreen> {
   var _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
 
   GoogleSignInAccount _currentUser;
   String _contactText = '';
@@ -219,15 +221,26 @@ class LoginState extends State<LoginScreen> {
                           textColor: Colors.white,
                           color: Colors.teal,
                           child: Text('Login'),
-                          onPressed: () {
-                            setState(() {
-                              if (_formKey.currentState.validate()) {
-                                debugPrint("SUCCESS");
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              print(emailController.text);
+                              print(passwordController.text);
+                              try{
+                                final occurUser = await _auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                                if (occurUser != null){
+                                  print("User Occur at DataBase");
                                   Navigator.pushReplacement(context, MaterialPageRoute(
                                       builder: (context) => Dashboard()),
                                   );
+                                }
+                                // setState(() {
+                                //   showSpinner = false;
+                                // });
+                              }catch(e) {
+                                print(e);
                               }
-                            });
+                            }
+
                           },
                         )),
                     Container(
