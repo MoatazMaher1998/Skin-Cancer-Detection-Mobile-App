@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:skin_cancer_app/dashboard.dart';
 import 'signUp.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -86,6 +87,8 @@ class LoginState extends State<LoginScreen> {
 
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
+  bool showSpinner = false;
+
   Widget _buildBody() {
     GoogleSignInAccount user = _currentUser;
     if (user != null) {
@@ -161,111 +164,117 @@ class LoginState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Form (
-            key: _formKey,
-            child: Padding(
-                padding: EdgeInsets.all(10),
-                child: ListView(
-                  children: <Widget>[
-                    Container(
-                        alignment: Alignment.center,
+        body: ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          child: Form (
+              key: _formKey,
+              child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: ListView(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            'Log in',
+                            style: TextStyle(fontSize: 20),
+                          )),
+                      Container(
                         padding: EdgeInsets.all(10),
-                        child: Text(
-                          'Log in',
-                          style: TextStyle(fontSize: 20),
-                        )),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (String value) {
-                          bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value);
-                          if (!emailValid) {
-                            return 'Please enter a valid e-mail address';
-                          }
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'E-mail address',
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: TextFormField(
-                        obscureText: true,
-                        controller: passwordController,
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a password';
-                          }
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Password',
-                        ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: (){
-                        //forgot password screen
-                      },
-                      textColor: Colors.teal,
-                      child: Text('Forgot Password'),
-                    ),
-                    Container(
-                        height: 50,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: RaisedButton(
-                          textColor: Colors.white,
-                          color: Colors.teal,
-                          child: Text('Login'),
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              print(emailController.text);
-                              print(passwordController.text);
-                              try{
-                                final occurUser = await _auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                                if (occurUser != null){
-                                  print("User Occur at DataBase");
-                                  Navigator.pushReplacement(context, MaterialPageRoute(
-                                      builder: (context) => Dashboard()),
-                                  );
-                                }
-                                // setState(() {
-                                //   showSpinner = false;
-                                // });
-                              }catch(e) {
-                                print(e);
-                              }
+                        child: TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (String value) {
+                            bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value);
+                            if (!emailValid) {
+                              return 'Please enter a valid e-mail address';
                             }
-
                           },
-                        )),
-                    Container(
-                        child: Row(
-                          children: <Widget>[
-                            Text("Don't have an account?"),
-                            FlatButton(
-                              textColor: Colors.teal,
-                              child: Text(
-                                'Sign up',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              onPressed: () {
-                                //signup screen
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => SignUp()),
-                                );
-                              },
-                            )
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
-                        )),
-                    Container(
-                      child: _buildBody()
-                    )
-                  ],
-                ))));
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'E-mail address',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: TextFormField(
+                          obscureText: true,
+                          controller: passwordController,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Password',
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: (){
+                          //forgot password screen
+                        },
+                        textColor: Colors.teal,
+                        child: Text('Forgot Password'),
+                      ),
+                      Container(
+                          height: 50,
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: RaisedButton(
+                            textColor: Colors.white,
+                            color: Colors.teal,
+                            child: Text('Login'),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                print(emailController.text);
+                                print(passwordController.text);
+                                try{
+                                  setState(() {
+                                    showSpinner = true;
+                                  });
+                                  final occurUser = await _auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                                  if (occurUser != null){
+                                    print("User Occur at DataBase");
+                                    Navigator.pushReplacement(context, MaterialPageRoute(
+                                        builder: (context) => Dashboard()),
+                                    );
+                                  }
+                                  setState(() {
+                                    showSpinner = false;
+                                  });
+                                }catch(e) {
+                                  print(e);
+                                }
+                              }
+
+                            },
+                          )),
+                      Container(
+                          child: Row(
+                            children: <Widget>[
+                              Text("Don't have an account?"),
+                              FlatButton(
+                                textColor: Colors.teal,
+                                child: Text(
+                                  'Sign up',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                onPressed: () {
+                                  //signup screen
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => SignUp()),
+                                  );
+                                },
+                              )
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                          )),
+                      Container(
+                        child: _buildBody()
+                      )
+                    ],
+                  ))),
+        ));
   }}
