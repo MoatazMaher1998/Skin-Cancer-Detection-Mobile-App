@@ -196,7 +196,7 @@ class SignupState extends State<SignUp> {
                         try{
                           final newUser = await _auth.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
                               if (newUser != null){
-                                //print("DONE ADDED TO DATABASE");
+                                print("DONE ADDED TO DATABASE");
                                 Navigator.pushReplacement(context, MaterialPageRoute(
                                     builder: (context) => Dashboard()),
                                 );
