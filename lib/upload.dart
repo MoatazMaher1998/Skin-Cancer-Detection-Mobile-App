@@ -40,7 +40,9 @@ class _UploadState extends State<Upload> {
     print(response.statusCode);
     response.stream.transform(utf8.decoder).listen((value) {
       print(value);
-      result = value;
+      setState(() {
+        result = value;
+      });
     });
   }
 
@@ -95,7 +97,7 @@ class _UploadState extends State<Upload> {
                           width: 250,
                           color: Colors.lightGreen,
                           child: FlatButton(
-                            onPressed: () async {
+                            onPressed: () {
                               setState(() {
                                 upload(_image);
                               });
