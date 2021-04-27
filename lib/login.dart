@@ -191,7 +191,7 @@ class LoginState extends State<LoginScreen> {
                               return 'Please enter a valid e-mail address';
                             }
                           },
-                          decoration: KTextFormField.copyWith(labelText: 'E-mail address'),
+                          decoration: KTextFormField.copyWith(labelText: 'E-mail address') ,
                         ),
                       ),
                       Container(
