@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:skin_cancer_app/constants.dart';
 import 'NavigationDrawer.dart';
 import 'package:intl/intl.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
@@ -50,10 +52,7 @@ class EditSettingsState extends State<AccountSettings> {
                             return 'Please enter your name';
                           }
                         },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Your Name',
-                        ),
+                        decoration: KTextFormField.copyWith(labelText: 'Your Name'),
                       ),
                     ),
                     Container(
@@ -69,10 +68,7 @@ class EditSettingsState extends State<AccountSettings> {
                             return 'Please enter a valid e-mail address';
                           }
                         },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'E-mail address',
-                        ),
+                        decoration: KTextFormField.copyWith(labelText: 'E-mail address'),
                       ),
                     ),
                     Container(
@@ -85,10 +81,7 @@ class EditSettingsState extends State<AccountSettings> {
                             return 'Please enter your old password';
                           }
                         },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Old Password',
-                        ),
+                        decoration: KTextFormField.copyWith(labelText: 'Old Password'),
                       ),
                     ),
                     Container(
@@ -101,10 +94,7 @@ class EditSettingsState extends State<AccountSettings> {
                     return 'Please enter your new password';
                     }
                     },
-                    decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'New Password',
-                    ),
+                    decoration: KTextFormField.copyWith(labelText: 'New Password'),
                     ),
                     ),
                     Container(
@@ -119,10 +109,7 @@ class EditSettingsState extends State<AccountSettings> {
                           if (value != newpasswordController.text)
                             return 'Passwords do not match';
                         },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Confirm Password',
-                        ),
+                        decoration: KTextFormField.copyWith(labelText: 'Confirm Password'),
                       ),
                     ),
                     Container(
@@ -139,10 +126,7 @@ class EditSettingsState extends State<AccountSettings> {
                             return 'Please enter your date of birth';
                           }
                         },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Date of Birth',
-                        ),
+                        decoration: KTextFormField.copyWith(labelText: 'Date of Birth'),
                       ),
                     ),
                     Container(
@@ -205,7 +189,7 @@ class EditSettingsState extends State<AccountSettings> {
                           },
                         )),
                   ],
-                )))));
+                ),),),),);
   }
 
   Future<void> _selectDate(BuildContext context) async {
