@@ -26,7 +26,8 @@ class _UploadState extends State<Upload> {
     });
   }
 
-  Future upload(File imageFile) async {
+  var result;
+  upload(File imageFile) async {
     var stream =
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
@@ -39,11 +40,10 @@ class _UploadState extends State<Upload> {
     print(response.statusCode);
     response.stream.transform(utf8.decoder).listen((value) {
       print(value);
-      return value;
+      result = value;
     });
   }
 
-  var result;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -95,10 +95,9 @@ class _UploadState extends State<Upload> {
                           width: 250,
                           color: Colors.lightGreen,
                           child: FlatButton(
-                            onPressed: () {
+                            onPressed: () async {
                               setState(() {
-                                result = upload(_image);
-                                print("${result.toString()}");
+                                upload(_image);
                               });
                             },
                             child: Text(
