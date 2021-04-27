@@ -5,6 +5,7 @@ import 'package:skin_cancer_app/TestsHistory.dart';
 import 'package:skin_cancer_app/dashboard.dart';
 import 'package:skin_cancer_app/main.dart';
 import 'package:skin_cancer_app/userdetails.dart';
+import 'package:skin_cancer_app/CustomListTile.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _MyDrawerState extends State<MyDrawer> {
     // print("NAMEEEEE");
     // print(loggedInUser.displayName);
     setState(() {
-      name  = loggedInUser.displayName;
+      name = loggedInUser.displayName;
     });
 
     //print(name);
@@ -34,10 +35,8 @@ class _MyDrawerState extends State<MyDrawer> {
     getUser();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
         child: ListView(
       padding: EdgeInsets.zero,
@@ -53,59 +52,41 @@ class _MyDrawerState extends State<MyDrawer> {
             color: Colors.blue,
           ),
         ),
-        ListTile(
-          title: Text('Make a new Test'),
-          onTap: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
-            //Navigator.pop(context);
+        CustomListTile(
+          title: "Make A Test",
+          ontap: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Dashboard()),
-            );
+                context, MaterialPageRoute(builder: (context) => Dashboard()));
           },
         ),
-        ListTile(
-          title: Text('Tests History'),
-          onTap: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TestsHistory()),
-            );
-          },
-        ),
-        ListTile(
-          title: Text('Account Settings'),
-          onTap: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
-            // Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AccountSettings()),
-            );
-          },
-        ),
-        ListTile(
-          title: Text('Log Out'),
-          onTap: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyApp()),
-            );
-          },
-        ),
+        CustomListTile(
+            title: "Test History",
+            ontap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TestsHistory()),
+              );
+            }),
+        CustomListTile(
+            title: "AccountSettings",
+            ontap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AccountSettings()),
+              );
+            }),
+        CustomListTile(
+            title: "Log Out",
+            ontap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyApp()),
+              );
+            }),
       ],
     ));
   }
 }
+
