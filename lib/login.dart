@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:skin_cancer_app/constants.dart';
 import 'package:skin_cancer_app/dashboard.dart';
 import 'signUp.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -190,10 +191,7 @@ class LoginState extends State<LoginScreen> {
                               return 'Please enter a valid e-mail address';
                             }
                           },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'E-mail address',
-                          ),
+                          decoration: KTextFormField.copyWith(labelText: 'E-mail address'),
                         ),
                       ),
                       Container(
@@ -206,10 +204,7 @@ class LoginState extends State<LoginScreen> {
                               return 'Please enter a password';
                             }
                           },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Password',
-                          ),
+                          decoration: KTextFormField.copyWith(labelText: 'Password'),
                         ),
                       ),
                       FlatButton(
