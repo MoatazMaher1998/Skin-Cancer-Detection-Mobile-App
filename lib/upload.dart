@@ -15,7 +15,8 @@ class Upload extends StatefulWidget {
 class _UploadState extends State<Upload> {
   File _image;
   final picker = ImagePicker();
-  Future getImage() async {
+  var result;
+  Future _getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
       if (pickedFile != null) {
@@ -26,8 +27,18 @@ class _UploadState extends State<Upload> {
     });
   }
 
-  var result;
-  upload(File imageFile) async {
+  Future _getImageFromMemory() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  _upload(File imageFile) async {
     var stream =
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
@@ -50,15 +61,26 @@ class _UploadState extends State<Upload> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: getImage,
-          tooltip: 'Pick Image',
-          child: Icon(Icons.add_a_photo),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.teal,
+              onPressed: _getImageFromMemory,
+              child: Icon(Icons.add),
+            ),
+            SizedBox(height: 10),
+            FloatingActionButton(
+              backgroundColor: Colors.teal,
+              onPressed: _getImageFromCamera,
+              child: Icon(Icons.add_a_photo),
+            )
+          ],
         ),
         body: Container(
             child: ListView(
           children: [
-            SizedBox(height: 50),
+            SizedBox(height: 70),
             Row(children: <Widget>[
               Expanded(
                 child: Row(
@@ -95,20 +117,21 @@ class _UploadState extends State<Upload> {
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 50),
                           width: 250,
-                          color: Colors.lightGreen,
-                          child: FlatButton(
+                          child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(
+                                    color: Color.fromRGBO(0, 160, 227, 1))),
                             onPressed: () {
                               setState(() {
-                                upload(_image);
+                                _upload(_image);
                               });
                             },
-                            child: Text(
-                              "UPLOAD",
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                            padding: EdgeInsets.all(10.0),
+                            color: Colors.teal,
+                            textColor: Colors.white,
+                            child:
+                                Text("Upload", style: TextStyle(fontSize: 15)),
                           ),
                         ),
                         Container(
