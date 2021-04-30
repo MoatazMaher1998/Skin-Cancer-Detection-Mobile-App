@@ -76,7 +76,9 @@ flutter:
     - family: Zen Dots
       fonts:
         - asset: fonts/ZenDots-Regular.ttf
-
+    - family: NewTegomin-Regular
+      fonts:
+        - asset: fonts/NewTegomin-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -30,7 +30,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     return Scaffold(
       body: Center(
         child: SpinKitCubeGrid(
-          color: Colors.blue,
+          color: Colors.teal,
           size: 100.0,
           duration: Duration(milliseconds: 350),
         ),

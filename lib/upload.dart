@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import 'package:path/path.dart';
 import 'package:async/async.dart';
@@ -38,7 +39,7 @@ class _UploadState extends State<Upload> {
     });
   }
 
-  _upload(File imageFile) async {
+  _upload(File imageFile, context) async {
     var stream =
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
@@ -53,10 +54,40 @@ class _UploadState extends State<Upload> {
       print(value);
       setState(() {
         result = value;
+        showSpinner = false;
+        _showMyDialog(context);
       });
     });
   }
 
+  Future<void> _showMyDialog(context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Your Result is Ready!!!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('$result'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Proceed'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  bool showSpinner = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -79,75 +110,80 @@ class _UploadState extends State<Upload> {
             )
           ],
         ),
-        body: Container(
-            child: ListView(
-          children: [
-            SizedBox(height: 70),
-            Row(children: <Widget>[
-              Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "    Cancer",
-                        style: TextStyle(
-                            fontFamily: 'Zen Dots',
-                            fontSize: 20,
-                            color: Colors.teal),
-                      ),
-                    ),
-                    Expanded(child: Image.asset("images/logo.png")),
-                    Expanded(
-                      child: Text(
-                        "    Free",
-                        style: TextStyle(
-                            fontFamily: 'Zen Dots',
-                            fontSize: 20,
-                            color: Colors.teal),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ]),
-            Row(children: <Widget>[
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 50),
-                          width: 250,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(
-                                    color: Color.fromRGBO(0, 160, 227, 1))),
-                            onPressed: () {
-                              setState(() {
-                                _upload(_image);
-                              });
-                            },
-                            padding: EdgeInsets.all(10.0),
-                            color: Colors.teal,
-                            textColor: Colors.white,
-                            child:
-                                Text("Upload", style: TextStyle(fontSize: 15)),
-                          ),
+        body: ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          child: Container(
+              child: ListView(
+            children: [
+              SizedBox(height: 70),
+              Row(children: <Widget>[
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "    Cancer",
+                          style: TextStyle(
+                              fontFamily: 'Zen Dots',
+                              fontSize: 20,
+                              color: Colors.teal),
                         ),
-                        Container(
+                      ),
+                      Expanded(child: Image.asset("images/logo.png")),
+                      Expanded(
+                        child: Text(
+                          "    Free",
+                          style: TextStyle(
+                              fontFamily: 'Zen Dots',
+                              fontSize: 20,
+                              color: Colors.teal),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ]),
+              Row(children: <Widget>[
+                Expanded(
+                    flex: 2,
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 50),
                             width: 250,
-                            height: 200,
-                            child: _image == null ? null : Image.file(_image)),
-                        Text("$result")
-                      ],
-                    ),
-                    color: Colors.white,
-                  ))
-            ])
-          ],
-        )),
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(
+                                      color: Color.fromRGBO(0, 160, 227, 1))),
+                              onPressed: () {
+                                setState(() {
+                                  showSpinner = true;
+                                  _upload(_image, context);
+                                });
+                              },
+                              padding: EdgeInsets.all(10.0),
+                              color: Colors.teal,
+                              textColor: Colors.white,
+                              child: Text("Upload",
+                                  style: TextStyle(fontSize: 15)),
+                            ),
+                          ),
+                          Container(
+                              width: 250,
+                              height: 200,
+                              child:
+                                  _image == null ? null : Image.file(_image)),
+                          Text("${result == null ? " " : "$result"}")
+                        ],
+                      ),
+                      color: Colors.white,
+                    ))
+              ])
+            ],
+          )),
+        ),
       ),
     );
   }
