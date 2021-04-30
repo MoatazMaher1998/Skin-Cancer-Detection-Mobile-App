@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:skin_cancer_app/FirstScreen.dart';
 import 'package:skin_cancer_app/constants.dart';
 import 'package:skin_cancer_app/dashboard.dart';
 import 'signUp.dart';
@@ -13,24 +14,20 @@ import 'dart:convert' show json;
 class LoginScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-
     return LoginState();
   }
 }
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
-  clientId: '300830567303-1i5fo70r8rc8499b4uih06t3uqp1no7o.apps.googleusercontent.com',
+  clientId:
+      '300830567303-1i5fo70r8rc8499b4uih06t3uqp1no7o.apps.googleusercontent.com',
   scopes: [
     'email',
     'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
 
-
-
-
 class LoginState extends State<LoginScreen> {
-
   Future<void> _handleGetContact(GoogleSignInAccount user) async {
     setState(() {
       _contactText = "Loading contact info...";
@@ -62,12 +59,12 @@ class LoginState extends State<LoginScreen> {
   String _pickFirstNamedContact(Map<String, dynamic> data) {
     final List<dynamic> connections = data['connections'];
     final Map<String, dynamic> contact = connections.firstWhere(
-          (dynamic contact) => contact['names'] != null,
+      (dynamic contact) => contact['names'] != null,
       orElse: () => null,
     );
     if (contact != null) {
       final Map<String, dynamic> name = contact['names'].firstWhere(
-            (dynamic name) => name['displayName'] != null,
+        (dynamic name) => name['displayName'] != null,
         orElse: () => null,
       );
       if (name != null) {
@@ -124,22 +121,21 @@ class LoginState extends State<LoginScreen> {
               text: TextSpan(
                 children: [
                   WidgetSpan(
-                     child:  Image.asset('images/googleLogo.png',width:20,height:20),
-                    ),
+                    child: Image.asset('images/googleLogo.png',
+                        width: 20, height: 20),
+                  ),
                   TextSpan(
                     text: " Sign in using Google",
                   ),
                 ],
               ),
-            )
-            ,
+            ),
             onPressed: _handleSignIn,
           ),
         ],
       );
     }
   }
-
 
   var _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
@@ -166,110 +162,118 @@ class LoginState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ModalProgressHUD(
-          inAsyncCall: showSpinner,
-          child: Form (
-              key: _formKey,
-              child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            'Log in',
-                            style: TextStyle(fontSize: 20),
-                          )),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: TextFormField(
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (String value) {
-                            bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value);
-                            if (!emailValid) {
-                              return 'Please enter a valid e-mail address';
-                            }
-                          },
-                          decoration: KTextFormField.copyWith(labelText: 'E-mail address') ,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: TextFormField(
-                          obscureText: true,
-                          controller: passwordController,
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return 'Please enter a password';
-                            }
-                          },
-                          decoration: KTextFormField.copyWith(labelText: 'Password'),
-                        ),
-                      ),
-                      FlatButton(
-                        onPressed: (){
-                          //forgot password screen
-                        },
-                        textColor: Colors.teal,
-                        child: Text('Forgot Password'),
-                      ),
-                      Container(
-                          height: 50,
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: RaisedButton(
-                            textColor: Colors.white,
-                            color: Colors.teal,
-                            child: Text('Login'),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                print(emailController.text);
-                                print(passwordController.text);
-                                try{
-                                  setState(() {
-                                    showSpinner = true;
-                                  });
-                                  final occurUser = await _auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                                  if (occurUser != null){
-                                    print("User Occur at DataBase");
-                                    Navigator.pushReplacement(context, MaterialPageRoute(
-                                        builder: (context) => Dashboard()),
-                                    );
-                                  }
-                                  setState(() {
-                                    showSpinner = false;
-                                  });
-                                }catch(e) {
-                                  print(e);
-                                }
+      inAsyncCall: showSpinner,
+      child: Form(
+          key: _formKey,
+          child: Padding(
+              padding: EdgeInsets.all(10),
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        'Log in',
+                        style: TextStyle(fontSize: 20),
+                      )),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: TextFormField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (String value) {
+                        bool emailValid = RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(value);
+                        if (!emailValid) {
+                          return 'Please enter a valid e-mail address';
+                        }
+                      },
+                      decoration:
+                          KTextFormField.copyWith(labelText: 'E-mail address'),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: TextFormField(
+                      obscureText: true,
+                      controller: passwordController,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter a password';
+                        }
+                      },
+                      decoration:
+                          KTextFormField.copyWith(labelText: 'Password'),
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      //forgot password screen
+                    },
+                    textColor: Colors.teal,
+                    child: Text('Forgot Password'),
+                  ),
+                  Container(
+                      height: 50,
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: RaisedButton(
+                        textColor: Colors.white,
+                        color: Colors.teal,
+                        child: Text('Login'),
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            print(emailController.text);
+                            print(passwordController.text);
+                            try {
+                              setState(() {
+                                showSpinner = true;
+                              });
+                              final occurUser =
+                                  await _auth.signInWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text);
+                              if (occurUser != null) {
+                                print("User Occur at DataBase");
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FirstScreen()),
+                                );
                               }
-
-                            },
-                          )),
-                      Container(
-                          child: Row(
-                            children: <Widget>[
-                              Text("Don't have an account?"),
-                              FlatButton(
-                                textColor: Colors.teal,
-                                child: Text(
-                                  'Sign up',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                onPressed: () {
-                                  //signup screen
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => SignUp()),
-                                  );
-                                },
-                              )
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.center,
-                          )),
-                      Container(
-                        child: _buildBody()
+                              setState(() {
+                                showSpinner = false;
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                          }
+                        },
+                      )),
+                  Container(
+                      child: Row(
+                    children: <Widget>[
+                      Text("Don't have an account?"),
+                      FlatButton(
+                        textColor: Colors.teal,
+                        child: Text(
+                          'Sign up',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        onPressed: () {
+                          //signup screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignUp()),
+                          );
+                        },
                       )
                     ],
-                  ))),
-        ));
-  }}
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  )),
+                  Container(child: _buildBody())
+                ],
+              ))),
+    ));
+  }
+}

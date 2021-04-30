@@ -37,6 +37,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final _auth = FirebaseAuth.instance;
     return Drawer(
         child: ListView(
       padding: EdgeInsets.zero,
@@ -78,7 +79,8 @@ class _MyDrawerState extends State<MyDrawer> {
             }),
         CustomListTile(
             title: "Log Out",
-            ontap: () {
+            ontap: () async {
+              await _auth.signOut();
               Navigator.pop(context);
               Navigator.push(
                 context,
@@ -89,4 +91,3 @@ class _MyDrawerState extends State<MyDrawer> {
     ));
   }
 }
-

@@ -65,12 +65,14 @@ class _UploadState extends State<Upload> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
+              heroTag: "Add from Memory",
               backgroundColor: Colors.teal,
               onPressed: _getImageFromMemory,
               child: Icon(Icons.add),
             ),
             SizedBox(height: 10),
             FloatingActionButton(
+              heroTag: "Add from Camera",
               backgroundColor: Colors.teal,
               onPressed: _getImageFromCamera,
               child: Icon(Icons.add_a_photo),
@@ -137,9 +139,7 @@ class _UploadState extends State<Upload> {
                         Container(
                             width: 250,
                             height: 200,
-                            child: _image == null
-                                ? Text('No image selected.')
-                                : Image.file(_image)),
+                            child: _image == null ? null : Image.file(_image)),
                         Text("$result")
                       ],
                     ),

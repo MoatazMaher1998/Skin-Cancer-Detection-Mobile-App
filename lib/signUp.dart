@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'dashboard.dart';
 import 'constants.dart';
+import 'main.dart';
 
 //TODO 1 Selected Gender is equal to null even after selecting it ...
 //TODO 2 Save the rest of data from the form after saving the User...
@@ -65,7 +65,8 @@ class SignupState extends State<SignUp> {
                           return 'Please enter your name';
                         }
                       },
-                      decoration: KTextFormField.copyWith(labelText: "Enter Your Name"),
+                      decoration:
+                          KTextFormField.copyWith(labelText: "Enter Your Name"),
                     ),
                   ),
                   Container(
@@ -81,7 +82,8 @@ class SignupState extends State<SignUp> {
                           return 'Please enter a valid e-mail address';
                         }
                       },
-                      decoration: KTextFormField.copyWith(labelText: 'E-mail address'),
+                      decoration:
+                          KTextFormField.copyWith(labelText: 'E-mail address'),
                     ),
                   ),
                   Container(
@@ -94,7 +96,8 @@ class SignupState extends State<SignUp> {
                           return 'Please enter a password';
                         }
                       },
-                      decoration: KTextFormField.copyWith(labelText: 'Password'),
+                      decoration:
+                          KTextFormField.copyWith(labelText: 'Password'),
                     ),
                   ),
                   Container(
@@ -109,7 +112,8 @@ class SignupState extends State<SignUp> {
                         if (value != passwordController.text)
                           return 'Passwords do not match';
                       },
-                      decoration: KTextFormField.copyWith(labelText: 'Confirm Password'),
+                      decoration: KTextFormField.copyWith(
+                          labelText: 'Confirm Password'),
                     ),
                   ),
                   Container(
@@ -126,7 +130,8 @@ class SignupState extends State<SignUp> {
                           return 'Please enter your date of birth';
                         }
                       },
-                      decoration: KTextFormField.copyWith(labelText: 'Date of Birth'),
+                      decoration:
+                          KTextFormField.copyWith(labelText: 'Date of Birth'),
                     ),
                   ),
                   Container(
@@ -201,7 +206,7 @@ class SignupState extends State<SignUp> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Dashboard()),
+                                    builder: (context) => MyApp()),
                               );
                             }
                             setState(() {
