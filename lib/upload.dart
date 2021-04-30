@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'constants.dart';
 
 class Upload extends StatefulWidget {
   @override
@@ -135,7 +136,14 @@ class _UploadState extends State<Upload> {
       },
     );
   }
+  Widget Animation(String text){
+    return TypewriterAnimatedTextKit(
+      text: [text],
+      speed: const Duration(milliseconds: 70),
+      textStyle: KTextStyleCancer,
 
+    );
+  }
   bool showSpinner = false;
   @override
   Widget build(BuildContext context) {
@@ -170,23 +178,11 @@ class _UploadState extends State<Upload> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          "    Cancer",
-                          style: TextStyle(
-                              fontFamily: 'Zen Dots',
-                              fontSize: 20,
-                              color: Colors.teal),
-                        ),
+                        child: Animation("  Cancer"),
                       ),
                       Expanded(child: Image.asset("images/logo.png")),
                       Expanded(
-                        child: Text(
-                          "    Free",
-                          style: TextStyle(
-                              fontFamily: 'Zen Dots',
-                              fontSize: 20,
-                              color: Colors.teal),
-                        ),
+                        child: Animation("    Free"),
                       )
                     ],
                   ),
