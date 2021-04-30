@@ -40,6 +40,14 @@ class _UploadState extends State<Upload> {
   }
 
   _upload(File imageFile, context) async {
+    if (_image == null) {
+      _showMyDialog(context, "noimage");
+      setState(() {
+        showSpinner = false;
+      });
+      return;
+    }
+    // Add Here if user not logged in
     var stream =
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
@@ -55,34 +63,75 @@ class _UploadState extends State<Upload> {
       setState(() {
         result = value;
         showSpinner = false;
-        _showMyDialog(context);
+        _showMyDialog(context, "result");
+        return;
       });
     });
   }
 
-  Future<void> _showMyDialog(context) async {
+  Future<void> _showMyDialog(context, String type) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Your Result is Ready!!!'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('$result'),
-              ],
+        if (type == "result") {
+          return AlertDialog(
+            title: Text('Your Result is Ready!!!'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('$result'),
+                ],
+              ),
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Proceed'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            actions: <Widget>[
+              TextButton(
+                child: Text('Proceed'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        } else if (type == "noimage") {
+          return AlertDialog(
+            title: Text('No Image Selected !'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('Please Select An Image'),
+                ],
+              ),
             ),
-          ],
-        );
+            actions: <Widget>[
+              TextButton(
+                child: Text('Proceed'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        } else {
+          return AlertDialog(
+            title: Text('Please Login First'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('You need to login before uploading images'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Login'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }
       },
     );
   }
@@ -149,6 +198,8 @@ class _UploadState extends State<Upload> {
                     child: Container(
                       child: Column(
                         children: [
+                          //  SizedBox(height: 30),
+                          //  Text("Upload Your Skin "),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 50),
                             width: 250,
@@ -172,10 +223,9 @@ class _UploadState extends State<Upload> {
                           ),
                           Container(
                               width: 250,
-                              height: 200,
+                              height: 160,
                               child:
                                   _image == null ? null : Image.file(_image)),
-                          Text("${result == null ? " " : "$result"}")
                         ],
                       ),
                       color: Colors.white,
