@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:skin_cancer_app/userdetails.dart';
 import 'dart:convert';
 import 'constants.dart';
 
@@ -145,9 +146,27 @@ class _UploadState extends State<Upload> {
     );
   }
 
+  Map<String,dynamic> resultsOfUser;
+  int lengthOfResults ;
+  void getResultAndLength() async{
+    bool result = await Userdetails().Userislogged();
+    if (result == true){
+      lengthOfResults  = await Userdetails().getlength();
+      resultsOfUser =  await Userdetails().getresults();
+      print(resultsOfUser);
+      print(lengthOfResults);
+    }
+
+  }
+  @override
+  void initState() {
+    super.initState();
+    getResultAndLength();
+  }
   bool showSpinner = false;
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         floatingActionButton: Column(

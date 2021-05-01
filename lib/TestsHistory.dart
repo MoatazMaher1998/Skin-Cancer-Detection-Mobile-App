@@ -23,8 +23,6 @@ class _TestsHistory extends State<TestsHistory> {
     getUser();
   }
 
-
-
   String name;
 
   List<Test> dummyHistoryList = [
@@ -37,17 +35,16 @@ class _TestsHistory extends State<TestsHistory> {
     bool result = await Userdetails().Userislogged();
     if (result == true){
       String username = await Userdetails().getUserName();
+
       setState((){
         name = username;
       });
     }
-
   }
 
 
   @override
   Widget build(BuildContext context) {
-    //final _auth = FirebaseAuth.instance;
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
