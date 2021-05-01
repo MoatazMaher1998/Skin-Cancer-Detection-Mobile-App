@@ -18,11 +18,11 @@ class _FirstScreen extends State<FirstScreen> {
     getUser();
   }
 
-  final _auth = FirebaseAuth.instance;
+  //final _auth = FirebaseAuth.instance;
   User loggedInUser;
   String name;
   void getUser() async {
-    loggedInUser = await Userdetails().getCurrentUser(_auth);
+    loggedInUser = await Userdetails().getCurrentUser();
     setState(() {
       name = loggedInUser.displayName;
     });

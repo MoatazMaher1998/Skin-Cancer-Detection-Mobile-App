@@ -171,65 +171,70 @@ class _UploadState extends State<Upload> {
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
           child: Container(
-              child: ListView(
-            children: [
-              SizedBox(height: 70),
-              Row(children: <Widget>[
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Animation("  Cancer"),
-                      ),
-                      Expanded(child: Image.asset("images/logo.png")),
-                      Expanded(
-                        child: Animation("    Free"),
-                      )
-                    ],
-                  ),
-                )
-              ]),
-              Row(children: <Widget>[
-                Expanded(
-                    flex: 2,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          //  SizedBox(height: 30),
-                          //  Text("Upload Your Skin "),
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 50),
-                            width: 250,
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  side: BorderSide(
-                                      color: Color.fromRGBO(0, 160, 227, 1))),
-                              onPressed: () {
-                                setState(() {
-                                  showSpinner = true;
-                                  _upload(_image, context);
-                                });
-                              },
-                              padding: EdgeInsets.all(10.0),
-                              color: Colors.teal,
-                              textColor: Colors.white,
-                              child: Text("Upload",
-                                  style: TextStyle(fontSize: 15)),
-                            ),
+            child: ListView(
+              children: [
+                SizedBox(height: 70),
+                Row(children: <Widget>[
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Animation("  Cancer"),
+                        ),
+                        Expanded(child: Image.asset("images/logo.png")),
+                        Expanded(
+                          child: Animation("    Free"),
+                        )
+                      ],
+                    ),
+                  )
+                ]),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Column(
+                            children: [
+                              //  SizedBox(height: 30),
+                              //  Text("Upload Your Skin "),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 50),
+                                width: 250,
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(
+                                          color:
+                                              Color.fromRGBO(0, 160, 227, 1))),
+                                  onPressed: () {
+                                    setState(() {
+                                      showSpinner = true;
+                                      _upload(_image, context);
+                                    });
+                                  },
+                                  padding: EdgeInsets.all(10.0),
+                                  color: Colors.teal,
+                                  textColor: Colors.white,
+                                  child: Text("Upload",
+                                      style: TextStyle(fontSize: 15)),
+                                ),
+                              ),
+                              Container(
+                                  width: 250,
+                                  height: 160,
+                                  child: _image == null
+                                      ? null
+                                      : Image.file(_image)),
+                            ],
                           ),
-                          Container(
-                              width: 250,
-                              height: 160,
-                              child:
-                                  _image == null ? null : Image.file(_image)),
-                        ],
-                      ),
-                      color: Colors.white,
-                    ))
-              ])
-            ],
-          )),
+                          color: Colors.white,
+                        ))
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
