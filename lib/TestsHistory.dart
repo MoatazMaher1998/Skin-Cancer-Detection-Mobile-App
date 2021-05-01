@@ -88,8 +88,7 @@ class _TestsHistory extends State<TestsHistory> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: ListView(
-        children: <Widget>[
+      body: 
           Container(
             child: ListView.builder(
               itemCount: dummyHistoryList.length,
@@ -102,8 +101,6 @@ class _TestsHistory extends State<TestsHistory> {
               },
             ),
           ),
-        ],
-      ),
     );
   }
 }
