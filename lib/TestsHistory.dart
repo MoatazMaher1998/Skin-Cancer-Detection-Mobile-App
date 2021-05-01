@@ -33,15 +33,14 @@ class _TestsHistory extends State<TestsHistory> {
 
   void getUser() async {
     bool result = await Userdetails().Userislogged();
-    if (result == true){
+    if (result == true) {
       String username = await Userdetails().getUserName();
 
-      setState((){
+      setState(() {
         name = username;
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +62,7 @@ class _TestsHistory extends State<TestsHistory> {
               }),
           SizedBox(width: 40),
           IconButton(
-            onPressed: ()  {
+            onPressed: () {
               Userdetails().UserSignOut();
               Navigator.pop(context);
               Navigator.push(
@@ -89,19 +88,19 @@ class _TestsHistory extends State<TestsHistory> {
         ),
         backgroundColor: Colors.white,
       ),
-      body: 
-          Container(
-            child: ListView.builder(
-              itemCount: dummyHistoryList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Text('${dummyHistoryList[index].index}'),
-                  title: Text('${dummyHistoryList[index].result}'),
-                  trailing: Text('${dummyHistoryList[index].date}'),
-                );
-              },
-            ),
-          ),
+      body: Container(
+        child: ListView.builder(
+          itemCount: dummyHistoryList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: Image.network(
+                  "https://alexunicovidapi.s3-eu-west-1.amazonaws.com/moatazmaher1998%40gmail.com/1.jpg"),
+              title: Text('${dummyHistoryList[index].result}'),
+              trailing: Text('${dummyHistoryList[index].date}'),
+            );
+          },
+        ),
+      ),
     );
   }
 }
