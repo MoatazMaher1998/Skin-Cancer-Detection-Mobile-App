@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -20,6 +21,7 @@ class _UploadState extends State<Upload> {
   final picker = ImagePicker();
   var result;
   bool showSpinner = false;
+  final _firestore = FirebaseFirestore.instance;
 
   Future _getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -101,6 +103,7 @@ class _UploadState extends State<Upload> {
               TextButton(
                 child: Text('Proceed'),
                 onPressed: () {
+                  addToFireStore();
                   setState(() {
                     _image = null;
                   });
@@ -163,16 +166,37 @@ class _UploadState extends State<Upload> {
   Map<String, dynamic> resultsOfUser;
   int lengthOfResults;
   String userEmail;
+  String documentId;
   void getResultAndLength() async {
     bool result = await Userdetails().Userislogged();
     if (result == true) {
       userEmail = await Userdetails().getEmail();
       lengthOfResults = await Userdetails().getlength() + 1;
       resultsOfUser = await Userdetails().getresults();
+      documentId = await Userdetails().getDocumentId();
       print(resultsOfUser);
       print(lengthOfResults);
       print(userEmail);
+      print(documentId);
     }
+  }
+  String format = "jpg";
+  void addToFireStore() async {
+    print(resultsOfUser);
+    Map <String,dynamic> resultCombine = resultsOfUser;
+    Map<String,dynamic> newPart = {
+      "result$lengthOfResults":{
+        "Image": "$lengthOfResults.$format",
+        "cellType": "0",
+        "date": DateTime.now().toString(),
+        "percentage": "$result"
+      }
+    };
+    resultCombine.addAll(newPart);
+    print(resultCombine);
+    await _firestore.collection("Information").doc(documentId).update({
+      "result": resultCombine
+    }) ;
   }
 
   @override
@@ -246,6 +270,7 @@ class _UploadState extends State<Upload> {
                                     setState(() {
                                       showSpinner = true;
                                       _upload(_image, context);
+
                                     });
                                   },
                                   padding: EdgeInsets.all(10.0),
