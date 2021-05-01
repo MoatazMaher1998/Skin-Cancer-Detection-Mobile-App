@@ -52,7 +52,7 @@ class _UploadState extends State<Upload> {
     var stream =
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
-    var uri = Uri.parse("https://skincancerapi-alexuni.herokuapp.com//API");
+    var uri = Uri.parse("https://skincancerapi-alexuni.herokuapp.com/API");
     var request = new http.MultipartRequest("POST", uri);
     var multipartFile = new http.MultipartFile('img', stream, length,
         filename: basename(imageFile.path));
