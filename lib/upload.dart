@@ -20,6 +20,7 @@ class _UploadState extends State<Upload> {
   final picker = ImagePicker();
   var result;
   bool showSpinner = false;
+
   Future _getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
@@ -43,6 +44,7 @@ class _UploadState extends State<Upload> {
   }
 
   _upload(File imageFile, context) async {
+    bool isLoggedin = await Userdetails().Userislogged();
     if (_image == null) {
       _showMyDialog(context, "noimage");
       setState(() {
@@ -50,13 +52,21 @@ class _UploadState extends State<Upload> {
       });
       return;
     }
-    // Add Here if user not logged in
+
+    if (isLoggedin == false) {
+      _showMyDialog(context, "loginError");
+      setState(() {
+        showSpinner = false;
+      });
+      return;
+    }
     var stream =
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
-    var uri = Uri.parse("https://skincancerapi-alexuni.herokuapp.com/API");
+    var uri = Uri.parse(
+        "https://skincancerapi-alexuni.herokuapp.com/API?Email=$userEmail&TestNumber=$lengthOfResults&Format=jpg");
     var request = new http.MultipartRequest("POST", uri);
-    var multipartFile = new http.MultipartFile('img', stream, length,
+    var multipartFile = new http.MultipartFile('file', stream, length,
         filename: basename(imageFile.path));
     request.files.add(multipartFile);
     var response = await request.send();
@@ -150,28 +160,29 @@ class _UploadState extends State<Upload> {
     );
   }
 
-
-  Map<String,dynamic> resultsOfUser;
-  int lengthOfResults ;
-  void getResultAndLength() async{
+  Map<String, dynamic> resultsOfUser;
+  int lengthOfResults;
+  String userEmail;
+  void getResultAndLength() async {
     bool result = await Userdetails().Userislogged();
-    if (result == true){
-      lengthOfResults  = await Userdetails().getlength();
-      resultsOfUser =  await Userdetails().getresults();
+    if (result == true) {
+      userEmail = await Userdetails().getEmail();
+      lengthOfResults = await Userdetails().getlength() + 1;
+      resultsOfUser = await Userdetails().getresults();
       print(resultsOfUser);
       print(lengthOfResults);
+      print(userEmail);
     }
-
   }
+
   @override
   void initState() {
     super.initState();
     getResultAndLength();
   }
-  bool showSpinner = false;
+
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         floatingActionButton: Column(
