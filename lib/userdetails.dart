@@ -10,25 +10,13 @@ class Userdetails{
   String _DataOfBirth;
   String _Gender;
   Map<String,dynamic> _results;
-  Future<User> getCurrentUser() async {
-    try {
+  Future<User> _getCurrentUser() async {
       final user = await _auth.currentUser;
-      //print(user);
-      if (user != null) {
-        _loggedInUser = user ;
-      }
-      else{
-        print("No User Is Valid");
-        throw "No User";
-      }
-
-    }catch(e){
-      print(e);
-    }
-    return _loggedInUser;
+      _loggedInUser = user ;
+      return _loggedInUser;
   }
   void getData() async {
-    _loggedInUser = await getCurrentUser();
+    _loggedInUser = await _getCurrentUser();
     var document = await _firestore.collection('Information').get();
     var messages = document.docs;
     //print(messages);
@@ -69,4 +57,16 @@ class Userdetails{
   void UserSignOut() async{
     await _auth.signOut();
   }
+  Future<bool> Userislogged()async{
+    _loggedInUser = await _getCurrentUser();
+    if (_loggedInUser == null){
+      return false;
+    }
+    return true;
+  }
+  Future<String> getUserName() async {
+    _loggedInUser = await _getCurrentUser();
+    return _loggedInUser.displayName.toString();
+  }
+
 }

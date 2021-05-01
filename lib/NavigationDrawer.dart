@@ -7,26 +7,24 @@ import 'package:skin_cancer_app/main.dart';
 import 'package:skin_cancer_app/userdetails.dart';
 import 'package:skin_cancer_app/CustomListTile.dart';
 
+
 class MyDrawer extends StatefulWidget {
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  //final _auth = FirebaseAuth.instance;
-  User loggedInUser;
+
   String name;
   void getUser() async {
-    loggedInUser = await Userdetails().getCurrentUser();
-    // print("!!!!!!!!!!!!!!!");
-    // print(loggedInUser);
-    // print("NAMEEEEE");
-    // print(loggedInUser.displayName);
-    setState(() {
-      name = loggedInUser.displayName;
-    });
+    bool result = await Userdetails().Userislogged();
+    if (result == true){
+      String username = await Userdetails().getUserName();
+      setState((){
+        name = username;
+      });
+    }
 
-    //print(name);
   }
 
   @override

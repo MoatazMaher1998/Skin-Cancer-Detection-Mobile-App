@@ -23,8 +23,8 @@ class _TestsHistory extends State<TestsHistory> {
     getUser();
   }
 
-  //final _auth = FirebaseAuth.instance;
-  User loggedInUser;
+
+
   String name;
 
   List<Test> dummyHistoryList = [
@@ -34,10 +34,14 @@ class _TestsHistory extends State<TestsHistory> {
   ];
 
   void getUser() async {
-    loggedInUser = await Userdetails().getCurrentUser();
-    setState(() {
-      name = loggedInUser.displayName;
-    });
+    bool result = await Userdetails().Userislogged();
+    if (result == true){
+      String username = await Userdetails().getUserName();
+      setState((){
+        name = username;
+      });
+    }
+
   }
 
 

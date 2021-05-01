@@ -18,14 +18,16 @@ class _FirstScreen extends State<FirstScreen> {
     getUser();
   }
 
-  //final _auth = FirebaseAuth.instance;
-  User loggedInUser;
   String name;
   void getUser() async {
-    loggedInUser = await Userdetails().getCurrentUser();
-    setState(() {
-      name = loggedInUser.displayName;
-    });
+    bool result = await Userdetails().Userislogged();
+    if (result == true){
+      String username = await Userdetails().getUserName();
+      setState((){
+        name = username;
+      });
+    }
+
   }
 
   /* Widget loginProfileClassifier2(String type) {
