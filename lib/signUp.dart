@@ -1,3 +1,5 @@
+// import 'dart:html';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +31,7 @@ class SignupState extends State<SignUp> {
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController DOBController = TextEditingController();
   String genderController;
-
+  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -187,22 +189,32 @@ class SignupState extends State<SignUp> {
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           debugPrint(
-                              "SUCCESS + ${emailController.text} + ${nameController.text} + ${passwordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
+                              "SUCCESS + ${emailController.text} + ${nameController.text} + ${passwordController.text} + ${confirmPasswordController.text} + ${DOBController.text.toString()} + $genderController");
                           try {
                             setState(() {
                               showSpinner = true;
                             });
 
-                            //TODO ADD to fireStore BOD
-                            //TODO ADD to fireStore Gender
+                            // ADD New User to Authentication...
                             final newUser =
-                                await _auth.createUserWithEmailAndPassword(
+                            await _auth.createUserWithEmailAndPassword(
                                     email: emailController.text,
                                     password: passwordController.text);
                             newUser.user.updateProfile(
                                 displayName: nameController.text, photoURL: "");
+
                             if (newUser != null) {
+                              //check about the user have been added or not
                               print("DONE ADDED TO DATABASE");
+                              //Store the new User to FireStore..
+                              await _firestore.collection("Information").add({
+                                  "DataOfBirth": DOBController.text.toString(),
+                                  "Gender": genderController,
+                                  "email": emailController.text.toString(),
+                                  "result" : {}
+                                });
+                              print("Dataa Saved to FireStore SUCESS");
+                              // change the layput to MyApp
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
