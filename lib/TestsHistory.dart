@@ -23,7 +23,7 @@ class _TestsHistory extends State<TestsHistory> {
     getUser();
   }
 
-  final _auth = FirebaseAuth.instance;
+  //final _auth = FirebaseAuth.instance;
   User loggedInUser;
   String name;
 
@@ -34,15 +34,16 @@ class _TestsHistory extends State<TestsHistory> {
   ];
 
   void getUser() async {
-    loggedInUser = await Userdetails().getCurrentUser(_auth);
+    loggedInUser = await Userdetails().getCurrentUser();
     setState(() {
       name = loggedInUser.displayName;
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
+    //final _auth = FirebaseAuth.instance;
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -61,8 +62,8 @@ class _TestsHistory extends State<TestsHistory> {
               }),
           SizedBox(width: 40),
           IconButton(
-            onPressed: () async {
-              await _auth.signOut();
+            onPressed: ()  {
+              Userdetails().UserSignOut();
               Navigator.pop(context);
               Navigator.push(
                 context,

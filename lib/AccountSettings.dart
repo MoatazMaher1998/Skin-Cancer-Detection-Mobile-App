@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:skin_cancer_app/constants.dart';
+import 'package:skin_cancer_app/userdetails.dart';
 import 'NavigationDrawer.dart';
 import 'package:intl/intl.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
@@ -15,7 +16,7 @@ class AccountSettings extends StatefulWidget {
 }
 
 class EditSettingsState extends State<AccountSettings> {
-  final _firestore = FirebaseFirestore.instance;
+  //final _firestore = FirebaseFirestore.instance;
   DateTime selectedDate = DateTime.now();
   var _formKey = GlobalKey<FormState>();
 
@@ -27,28 +28,39 @@ class EditSettingsState extends State<AccountSettings> {
   TextEditingController DOBController = TextEditingController();
   String genderController;
   // The way to retrieve the data ....
-  void getData() async {
-    var document = await _firestore.collection('Information').get();
-    for (var message in document.docs) {
-      print(message.data());
-    }
-  }
+  // void getData() async {
+  //   var document = await _firestore.collection('Information').get();
+  //   for (var message in document.docs) {
+  //     print(message.data());
+  //   }
+  // }
   // Method to Update the Databaase....
-  void setData() async {
-    await _firestore.collection("Information").add({
-      "DataOfBirth": "06/20/1998",
-      "Gender": "Male",
-      "email": "ahmed@gmail.com",
-      "result" : {
-        "result2" : "negative 50%",
-        "result1" : "Postive 60%",
-      }
-    });
+  // void setData() async {
+  //   await _firestore.collection("Information").add({
+  //     "DataOfBirth": "06/20/1998",
+  //     "Gender": "Male",
+  //     "email": "ahmed@gmail.com",
+  //     "result" : {
+  //       "result1" : {
+  //         "Image": "1.png",
+  //         "cellType" : "1",
+  //         "percentage": "60",
+  //         "data": "lsaa"
+  //       },
+  //
+  //     }
+  //   });
+  // }
+  @override
+  void initState() {
+
+    super.initState();
+
   }
   @override
   Widget build(BuildContext context) {
-    setData();
-    getData();
+    //setData();
+    Userdetails().getData();
     return Scaffold(
       appBar: AppBar(
         title: Text('Account Settings'),
