@@ -5,11 +5,13 @@ class Userdetails{
   final _firestore = FirebaseFirestore.instance;
   var Usermessage ;
   final _auth = FirebaseAuth.instance;
-
   String _email;
   String _DataOfBirth;
   String _Gender;
   Map<String,dynamic> _results;
+  int _lengthOfResults ;
+
+
   Future<User> _getCurrentUser() async {
       final user = await _auth.currentUser;
       _loggedInUser = user ;
@@ -37,27 +39,37 @@ class Userdetails{
     _Gender = Usermessage["Gender"].toString();
     _DataOfBirth = Usermessage["DataOfBirth"].toString();
     _results = Usermessage["result"];
-    print(_email);
-    print(_Gender);
-    print(_DataOfBirth);
-    print(_results);
+    _lengthOfResults = _results.length;
+    // print(_email);
+    // print(_Gender);
+    // print(_DataOfBirth);
+    // print(_results);
+    // print(_lengthOfResults);
   }
-  String getEmail(){
+  Future<String> getEmail() async{
+    await getData();
     return _email;
   }
-  String getdataOfBirth(){
+  Future<String> getdataOfBirth() async{
+    await getData();
     return _DataOfBirth;
   }
-  String getGender(){
+  Future<String> getGender() async{
+    await getData();
     return _Gender;
   }
-  Map<String,dynamic> getresults(){
+  Future<Map<String, dynamic>> getresults() async{
+    await getData();
     return _results;
+  }
+  Future<int> getlength() async{
+    await getData();
+    return _lengthOfResults;
   }
   void UserSignOut() async{
     await _auth.signOut();
   }
-  Future<bool> Userislogged()async{
+  Future<bool> Userislogged() async{
     _loggedInUser = await _getCurrentUser();
     if (_loggedInUser == null){
       return false;
