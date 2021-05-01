@@ -18,6 +18,7 @@ class _UploadState extends State<Upload> {
   File _image;
   final picker = ImagePicker();
   var result;
+  bool showSpinner = false;
   Future _getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
@@ -73,7 +74,7 @@ class _UploadState extends State<Upload> {
   Future<void> _showMyDialog(context, String type) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         if (type == "result") {
           return AlertDialog(
@@ -89,6 +90,9 @@ class _UploadState extends State<Upload> {
               TextButton(
                 child: Text('Proceed'),
                 onPressed: () {
+                  setState(() {
+                    _image = null;
+                  });
                   Navigator.of(context).pop();
                 },
               ),
@@ -145,7 +149,6 @@ class _UploadState extends State<Upload> {
     );
   }
 
-  bool showSpinner = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
