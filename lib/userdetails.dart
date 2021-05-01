@@ -8,6 +8,7 @@ class Userdetails{
   String _email;
   String _DataOfBirth;
   String _Gender;
+  String _documentId;
   Map<String,dynamic> _results;
   int _lengthOfResults ;
 
@@ -24,11 +25,13 @@ class Userdetails{
     //print(messages);
     for (var message in messages) {
       //print(document.docs.length);
+      //print(message.id);
       var dataEmails = message.data()["email"].toString();
       //print(dataEmails);
       //print(_loggedInUser.email);
         if(dataEmails == _loggedInUser.email){
           Usermessage = await message;
+          _documentId = await message.id;
           break;
         }
     }
@@ -68,6 +71,10 @@ class Userdetails{
   }
   void UserSignOut() async{
     await _auth.signOut();
+  }
+  Future<String> getDocumentId() async{
+    await getData();
+    return _documentId;
   }
   Future<bool> Userislogged() async{
     _loggedInUser = await _getCurrentUser();
