@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:skin_cancer_app/FirstScreen.dart';
-import 'package:skin_cancer_app/constants.dart';
 import 'signUp.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import "package:http/http.dart" as http;
@@ -233,13 +232,14 @@ class LoginState extends State<LoginScreen> {
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                                 semanticLabel: _obscureText
-                                    ? 'show password'
+                                    ? "show password"
                                     : 'hide password',
                               ),
                             ),
                           ),
                         ),
                       ),
+                      // ignore: deprecated_member_use
                       FlatButton(
                         onPressed: () {
                           //forgot password screen
@@ -250,6 +250,7 @@ class LoginState extends State<LoginScreen> {
                       Container(
                         height: 50,
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        // ignore: deprecated_member_use
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
@@ -319,6 +320,7 @@ class LoginState extends State<LoginScreen> {
                                   }
                                 }
                                 print('The error is $errorMessage');
+                                // ignore: deprecated_member_use
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content: new Text('Error: $errorMessage'),
                                   duration: new Duration(seconds: 10),
@@ -339,6 +341,7 @@ class LoginState extends State<LoginScreen> {
                           child: Row(
                         children: <Widget>[
                           Text("Don't have an account?"),
+                          // ignore: deprecated_member_use
                           FlatButton(
                             textColor: Colors.teal,
                             child: Text(

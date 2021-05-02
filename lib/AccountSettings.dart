@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:skin_cancer_app/constants.dart';
@@ -25,6 +24,7 @@ class EditSettingsState extends State<AccountSettings> {
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newpasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  // ignore: non_constant_identifier_names
   TextEditingController DOBController = TextEditingController();
   String genderController;
   // The way to retrieve the data ....
@@ -53,10 +53,9 @@ class EditSettingsState extends State<AccountSettings> {
   // }
   @override
   void initState() {
-
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     //setData();
@@ -71,159 +70,174 @@ class EditSettingsState extends State<AccountSettings> {
       body: Form(
         key: _formKey,
         child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Container(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: TextFormField(
-
-                        controller: nameController,
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                        },
-                        decoration: KTextFormField.copyWith(labelText: 'Your Name'),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (String value) {
-                          bool emailValid = RegExp(
+          padding: EdgeInsets.all(10),
+          child: Container(
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextFormField(
+                    controller: nameController,
+                    // ignore: missing_return
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                    },
+                    decoration: KTextFormField.copyWith(labelText: 'Your Name'),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    // ignore: missing_return
+                    validator: (String value) {
+                      bool emailValid = RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                              .hasMatch(value);
-                          if (!emailValid) {
-                            return 'Please enter a valid e-mail address';
-                          }
-                        },
-                        decoration: KTextFormField.copyWith(labelText: 'E-mail address'),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: TextFormField(
-                        obscureText: true,
-                        controller: oldPasswordController,
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your old password';
-                          }
-                        },
-                        decoration: KTextFormField.copyWith(labelText: 'Old Password'),
-                      ),
-                    ),
-                    Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: TextFormField(
+                          .hasMatch(value);
+                      if (!emailValid) {
+                        return 'Please enter a valid e-mail address';
+                      }
+                    },
+                    decoration:
+                        KTextFormField.copyWith(labelText: 'E-mail address'),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: oldPasswordController,
+                    // ignore: missing_return
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your old password';
+                      }
+                    },
+                    decoration:
+                        KTextFormField.copyWith(labelText: 'Old Password'),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextFormField(
                     obscureText: true,
                     controller: newpasswordController,
+                    // ignore: missing_return
                     validator: (String value) {
-                    if (value.isEmpty) {
-                    return 'Please enter your new password';
-                    }
+                      if (value.isEmpty) {
+                        return 'Please enter your new password';
+                      }
                     },
-                    decoration: KTextFormField.copyWith(labelText: 'New Password'),
-                    ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: TextFormField(
-                        obscureText: true,
-                        controller: confirmPasswordController,
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Please confirm your password';
+                    decoration:
+                        KTextFormField.copyWith(labelText: 'New Password'),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: confirmPasswordController,
+                    // ignore: missing_return
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Please confirm your password';
+                      }
+                      if (value != newpasswordController.text)
+                        return 'Passwords do not match';
+                    },
+                    decoration:
+                        KTextFormField.copyWith(labelText: 'Confirm Password'),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextFormField(
+                    controller: DOBController,
+                    keyboardType: TextInputType.datetime,
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      _selectDate(context);
+                    },
+                    // ignore: missing_return
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your date of birth';
+                      }
+                    },
+                    decoration:
+                        KTextFormField.copyWith(labelText: 'Date of Birth'),
+                  ),
+                ),
+                Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: Row(children: <Widget>[
+                      // Text("Gender",
+                      //  style: TextStyle(fontSize: 15.0),),
+                      // RadioGroup<String>.builder(
+                      //   groupValue: genderController,
+                      //   direction: Axis.horizontal,
+                      //   onChanged: (value) => setState(() {
+                      //     genderController = value;
+                      //   }),
+                      //   items: gender,
+                      //   itemBuilder: (item) => RadioButtonBuilder(
+                      //     item,
+                      //   ),
+                      // )
+                    ])),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: CustomRadioButton(
+                    width: 150,
+                    elevation: 0,
+                    defaultSelected: "MALE",
+                    absoluteZeroSpacing: false,
+                    unSelectedColor: Theme.of(context).canvasColor,
+                    buttonLables: [
+                      'Male',
+                      'Female',
+                    ],
+                    buttonValues: [
+                      "MALE",
+                      "FEMALE",
+                    ],
+                    buttonTextStyle: ButtonTextStyle(
+                        selectedColor: Colors.white,
+                        unSelectedColor: Colors.black,
+                        textStyle: TextStyle(fontSize: 16)),
+                    radioButtonValue: (value) {
+                      print(value);
+                    },
+                    selectedColor: Colors.teal,
+                  ),
+                ),
+                Container(
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    // ignore: deprecated_member_use
+                    child: RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.teal,
+                      child: Text('Save'),
+                      onPressed: () {
+                        setState(() {
+                          if (_formKey.currentState.validate()) {
+                            debugPrint(
+                                "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
                           }
-                          if (value != newpasswordController.text)
-                            return 'Passwords do not match';
-                        },
-                        decoration: KTextFormField.copyWith(labelText: 'Confirm Password'),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: TextFormField(
-                        controller: DOBController,
-                        keyboardType: TextInputType.datetime,
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          _selectDate(context);
-                        },
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your date of birth';
-                          }
-                        },
-                        decoration: KTextFormField.copyWith(labelText: 'Date of Birth'),
-                      ),
-                    ),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: Row(children: <Widget>[
-                          // Text("Gender",
-                          //  style: TextStyle(fontSize: 15.0),),
-                          // RadioGroup<String>.builder(
-                          //   groupValue: genderController,
-                          //   direction: Axis.horizontal,
-                          //   onChanged: (value) => setState(() {
-                          //     genderController = value;
-                          //   }),
-                          //   items: gender,
-                          //   itemBuilder: (item) => RadioButtonBuilder(
-                          //     item,
-                          //   ),
-                          // )
-                        ])),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: CustomRadioButton(
-                        width: 150,
-                        elevation: 0,
-                        defaultSelected: "MALE",
-                        absoluteZeroSpacing: false,
-                        unSelectedColor: Theme.of(context).canvasColor,
-                        buttonLables: [
-                          'Male',
-                          'Female',
-                        ],
-                        buttonValues: [
-                          "MALE",
-                          "FEMALE",
-                        ],
-                        buttonTextStyle: ButtonTextStyle(
-                            selectedColor: Colors.white,
-                            unSelectedColor: Colors.black,
-                            textStyle: TextStyle(fontSize: 16)),
-                        radioButtonValue: (value) {
-                          print(value);
-                        },
-                        selectedColor: Colors.teal,
-                      ),
-                    ),
-                    Container(
-                        height: 50,
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: RaisedButton(
-                          textColor: Colors.white,
-                          color: Colors.teal,
-                          child: Text('Save'),
-                          onPressed: () {
-                            setState(() {
-                              if (_formKey.currentState.validate()) {
-                                debugPrint(
-                                    "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
-                              }
-                            });
-                          },
-                        )),
-                  ],
-                ),),),),);
+                        });
+                      },
+                    )),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -238,6 +252,4 @@ class EditSettingsState extends State<AccountSettings> {
       });
     DOBController.text = DateFormat.yMMMd().format(selectedDate);
   }
-
-
 }

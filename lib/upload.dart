@@ -63,6 +63,7 @@ class _UploadState extends State<Upload> {
       return;
     }
     var stream =
+        // ignore: deprecated_member_use
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
     var uri = Uri.parse(
@@ -155,10 +156,12 @@ class _UploadState extends State<Upload> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget Animation(String text) {
+    // ignore: deprecated_member_use
     return TypewriterAnimatedTextKit(
       text: [text],
-      speed: const Duration(milliseconds: 70),
+      speed: const Duration(milliseconds: 100),
       textStyle: KTextStyleCancer,
     );
   }
@@ -180,12 +183,13 @@ class _UploadState extends State<Upload> {
       print(documentId);
     }
   }
+
   String format = "jpg";
   void addToFireStore() async {
     print(resultsOfUser);
-    Map <String,dynamic> resultCombine = resultsOfUser;
-    Map<String,dynamic> newPart = {
-      "result$lengthOfResults":{
+    Map<String, dynamic> resultCombine = resultsOfUser;
+    Map<String, dynamic> newPart = {
+      "result$lengthOfResults": {
         "Image": "$lengthOfResults.$format",
         "cellType": "0",
         "date": DateTime.now().toString(),
@@ -194,9 +198,10 @@ class _UploadState extends State<Upload> {
     };
     resultCombine.addAll(newPart);
     print(resultCombine);
-    await _firestore.collection("Information").doc(documentId).update({
-      "result": resultCombine
-    }) ;
+    await _firestore
+        .collection("Information")
+        .doc(documentId)
+        .update({"result": resultCombine});
   }
 
   @override
@@ -255,11 +260,23 @@ class _UploadState extends State<Upload> {
                         child: Container(
                           child: Column(
                             children: [
-                              //  SizedBox(height: 30),
-                              //  Text("Upload Your Skin "),
+                              SizedBox(height: 50),
                               Container(
-                                margin: EdgeInsets.symmetric(vertical: 50),
+                                padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
+                                width: 240,
+                                child: Center(
+                                  child: Text(
+                                    "It’s Never Too Late, Or Too Early    To Start Preventing Skin Cancer.",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 20),
                                 width: 250,
+                                // ignore: deprecated_member_use
                                 child: RaisedButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
@@ -270,7 +287,6 @@ class _UploadState extends State<Upload> {
                                     setState(() {
                                       showSpinner = true;
                                       _upload(_image, context);
-
                                     });
                                   },
                                   padding: EdgeInsets.all(10.0),
@@ -281,8 +297,8 @@ class _UploadState extends State<Upload> {
                                 ),
                               ),
                               Container(
-                                  width: 250,
-                                  height: 160,
+                                  width: 350,
+                                  height: 140,
                                   child: _image == null
                                       ? null
                                       : Image.file(_image)),

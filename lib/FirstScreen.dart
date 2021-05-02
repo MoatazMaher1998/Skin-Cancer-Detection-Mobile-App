@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:skin_cancer_app/TestsHistory.dart';
 import 'package:skin_cancer_app/userdetails.dart';
@@ -21,13 +20,12 @@ class _FirstScreen extends State<FirstScreen> {
   String name;
   void getUser() async {
     bool result = await Userdetails().Userislogged();
-    if (result == true){
+    if (result == true) {
       String username = await Userdetails().getUserName();
-      setState((){
+      setState(() {
         name = username;
       });
     }
-
   }
 
   /* Widget loginProfileClassifier2(String type) {

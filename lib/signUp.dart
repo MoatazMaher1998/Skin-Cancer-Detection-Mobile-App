@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:skin_cancer_app/userdetails.dart';
 import 'constants.dart';
 import 'main.dart';
 
@@ -30,6 +29,7 @@ class SignupState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  // ignore: non_constant_identifier_names
   TextEditingController DOBController = TextEditingController();
   String genderController;
   final _firestore = FirebaseFirestore.instance;
@@ -66,6 +66,7 @@ class SignupState extends State<SignUp> {
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: TextFormField(
                       controller: nameController,
+                      // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please enter your name';
@@ -80,6 +81,7 @@ class SignupState extends State<SignUp> {
                     child: TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
+                      // ignore: missing_return
                       validator: (String value) {
                         bool emailValid = RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -97,6 +99,7 @@ class SignupState extends State<SignUp> {
                     child: TextFormField(
                       obscureText: true,
                       controller: passwordController,
+                      // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please enter a password';
@@ -111,6 +114,7 @@ class SignupState extends State<SignUp> {
                     child: TextFormField(
                       obscureText: true,
                       controller: confirmPasswordController,
+                      // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please confirm your password';
@@ -131,6 +135,7 @@ class SignupState extends State<SignUp> {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         _selectDate(context);
                       },
+                      // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please enter your date of birth';
@@ -186,6 +191,7 @@ class SignupState extends State<SignUp> {
                   Container(
                     height: 50,
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    // ignore: deprecated_member_use
                     child: RaisedButton(
                       textColor: Colors.white,
                       color: Colors.teal,
@@ -201,7 +207,7 @@ class SignupState extends State<SignUp> {
 
                             // ADD New User to Authentication...
                             final newUser =
-                            await _auth.createUserWithEmailAndPassword(
+                                await _auth.createUserWithEmailAndPassword(
                                     email: emailController.text,
                                     password: passwordController.text);
                             newUser.user.updateProfile(
@@ -212,11 +218,11 @@ class SignupState extends State<SignUp> {
                               print("DONE ADDED TO DATABASE");
                               //Store the new User to FireStore..
                               await _firestore.collection("Information").add({
-                                  "DataOfBirth": DOBController.text.toString(),
-                                  "Gender": genderController,
-                                  "email": emailController.text.toString(),
-                                  "result" : {}
-                                });
+                                "DataOfBirth": DOBController.text.toString(),
+                                "Gender": genderController,
+                                "email": emailController.text.toString(),
+                                "result": {}
+                              });
                               print("Dataa Saved to FireStore SUCESS");
                               // change the layput to MyApp
                               Navigator.pushReplacement(
@@ -232,19 +238,19 @@ class SignupState extends State<SignUp> {
                             if (e.code == 'weak-password') {
                               print('The password provided is too weak.');
                             } else if (e.code == 'email-already-in-use') {
-                              print('The account already exists for that email.');
-                              _scaffoldKey.currentState.showSnackBar(
-                                  SnackBar(
-                                    content: new Text('Error: The account already exists for that email.'),
-                                    duration: new Duration(seconds: 10),
-                                  )
-                              );
+                              print(
+                                  'The account already exists for that email.');
+                              // ignore: deprecated_member_use
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                content: new Text(
+                                    'Error: The account already exists for that email.'),
+                                duration: new Duration(seconds: 10),
+                              ));
                               setState(() {
                                 showSpinner = false;
                               });
                             }
-                          }
-                          catch (e) {
+                          } catch (e) {
                             print("error $e");
                           }
                         }
