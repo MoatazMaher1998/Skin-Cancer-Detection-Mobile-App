@@ -9,8 +9,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'constants.dart';
 import 'main.dart';
 
-//TODO 1 Selected Gender is equal to null even after selecting it ...
-//TODO 2 Save the rest of data from the form after saving the User...
+
 List<String> gender = ["Male", "Female"];
 
 class SignUp extends StatefulWidget {
