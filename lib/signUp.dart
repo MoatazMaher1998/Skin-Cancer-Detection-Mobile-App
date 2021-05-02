@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:skin_cancer_app/userdetails.dart';
 import 'constants.dart';
 import 'main.dart';
 
@@ -33,9 +34,12 @@ class SignupState extends State<SignUp> {
   String genderController;
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.teal,
         elevation: 50,
@@ -224,8 +228,24 @@ class SignupState extends State<SignUp> {
                             setState(() {
                               showSpinner = false;
                             });
-                          } catch (e) {
-                            print(e);
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'weak-password') {
+                              print('The password provided is too weak.');
+                            } else if (e.code == 'email-already-in-use') {
+                              print('The account already exists for that email.');
+                              _scaffoldKey.currentState.showSnackBar(
+                                  SnackBar(
+                                    content: new Text('Error: The account already exists for that email.'),
+                                    duration: new Duration(seconds: 10),
+                                  )
+                              );
+                              setState(() {
+                                showSpinner = false;
+                              });
+                            }
+                          }
+                          catch (e) {
+                            print("error $e");
                           }
                         }
                       },

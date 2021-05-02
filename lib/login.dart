@@ -20,10 +20,9 @@ class LoginScreen extends StatefulWidget {
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   clientId:
-      '300830567303-1i5fo70r8rc8499b4uih06t3uqp1no7o.apps.googleusercontent.com',
+      'http://315856601755-gaius6c2t3nvfpkt2ne8659dbs6lksdk.apps.googleusercontent.com/',
   scopes: [
     'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
 
@@ -44,6 +43,9 @@ class LoginState extends State<LoginScreen> {
       });
       print('People API ${response.statusCode} response: ${response.body}');
       return;
+    }
+    else{
+      print("People API Error $response , ${response.statusCode}");
     }
     final Map<String, dynamic> data = json.decode(response.body);
     final String namedContact = _pickFirstNamedContact(data);
