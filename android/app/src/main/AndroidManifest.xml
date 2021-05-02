@@ -1,11 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.skin_cancer_app">
-    <uses-permission
-        android:name="android.permission.INTERNET"
-        android:maxSdkVersion="25" />
-    <uses-permission
-        android:name="android.permission.CAMERA"
-        android:maxSdkVersion="25" />
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:requestLegacyExternalStorage="true"
         android:label="skin_cancer_app"
