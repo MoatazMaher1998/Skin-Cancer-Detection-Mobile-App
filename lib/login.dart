@@ -43,8 +43,7 @@ class LoginState extends State<LoginScreen> {
       });
       print('People API ${response.statusCode} response: ${response.body}');
       return;
-    }
-    else{
+    } else {
       print("People API Error $response , ${response.statusCode}");
     }
     final Map<String, dynamic> data = json.decode(response.body);
@@ -88,7 +87,7 @@ class LoginState extends State<LoginScreen> {
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   bool showSpinner = false;
-
+  bool _obscureText = true;
   Widget _buildBody() {
     GoogleSignInAccount user = _currentUser;
     if (user != null) {
@@ -171,18 +170,17 @@ class LoginState extends State<LoginScreen> {
               padding: EdgeInsets.all(10),
               child: ListView(
                 children: <Widget>[
-                  Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        'Log in',
-                        style: TextStyle(fontSize: 20),
-                      )),
+                  Icon(
+                    Icons.person,
+                    color: Colors.black,
+                    size: 100.0,
+                  ),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
+                      // ignore: missing_return
                       validator: (String value) {
                         bool emailValid = RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -191,22 +189,48 @@ class LoginState extends State<LoginScreen> {
                           return 'Please enter a valid e-mail address';
                         }
                       },
-                      decoration:
-                          KTextFormField.copyWith(labelText: 'E-mail address'),
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25.0)),
+                      ),
                     ),
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: TextFormField(
-                      obscureText: true,
+                      obscureText: _obscureText,
                       controller: passwordController,
+                      // ignore: missing_return
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please enter a password';
                         }
                       },
-                      decoration:
-                          KTextFormField.copyWith(labelText: 'Password'),
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25.0)),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                          child: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            semanticLabel: _obscureText
+                                ? 'show password'
+                                : 'hide password',
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   FlatButton(
@@ -217,41 +241,47 @@ class LoginState extends State<LoginScreen> {
                     child: Text('Forgot Password'),
                   ),
                   Container(
-                      height: 50,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.teal,
-                        child: Text('Login'),
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            print(emailController.text);
-                            print(passwordController.text);
-                            try {
-                              setState(() {
-                                showSpinner = true;
-                              });
-                              final occurUser =
-                                  await _auth.signInWithEmailAndPassword(
-                                      email: emailController.text,
-                                      password: passwordController.text);
-                              if (occurUser != null) {
-                                print("User Occur at DataBase");
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FirstScreen()),
-                                );
-                              }
-                              setState(() {
-                                showSpinner = false;
-                              });
-                            } catch (e) {
-                              print(e);
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(
+                              color: Color.fromRGBO(0, 160, 227, 1))),
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          print(emailController.text);
+                          print(passwordController.text);
+                          try {
+                            setState(() {
+                              showSpinner = true;
+                            });
+                            final occurUser =
+                                await _auth.signInWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text);
+                            if (occurUser != null) {
+                              print("User Occur at DataBase");
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FirstScreen()),
+                              );
                             }
+                            setState(() {
+                              showSpinner = false;
+                            });
+                          } catch (e) {
+                            print(e);
                           }
-                        },
-                      )),
+                        }
+                      },
+                      padding: EdgeInsets.all(10.0),
+                      color: Colors.teal,
+                      textColor: Colors.white,
+                      child: Text("Login", style: TextStyle(fontSize: 20)),
+                    ),
+                  ),
                   Container(
                       child: Row(
                     children: <Widget>[
