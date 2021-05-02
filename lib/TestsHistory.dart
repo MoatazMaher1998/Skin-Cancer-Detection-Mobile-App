@@ -83,7 +83,7 @@ class _TestsHistory extends State<TestsHistory> {
           "  $name",
           style: TextStyle(
             color: Colors.teal,
-            fontSize: 30,
+            fontSize: 23,
           ),
         ),
         backgroundColor: Colors.white,
