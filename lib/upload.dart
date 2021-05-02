@@ -296,12 +296,37 @@ class _UploadState extends State<Upload> {
                                       style: TextStyle(fontSize: 15)),
                                 ),
                               ),
-                              Container(
-                                  width: 350,
-                                  height: 140,
-                                  child: _image == null
-                                      ? null
-                                      : Image.file(_image)),
+                              GestureDetector(
+                                onTap: () {
+                                  _getImageFromMemory();
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        border:
+                                            Border.all(color: Colors.black)),
+                                    width: 200,
+                                    height: 140,
+                                    child: _image == null
+                                        ? Center(
+                                            child: Icon(
+                                              Icons.arrow_circle_up,
+                                              size: 55,
+                                            ),
+                                          )
+                                        : Image.file(
+                                            _image,
+                                            fit: BoxFit.fitWidth,
+                                          )),
+                              ),
+                              SizedBox(height: 10),
+                              _image == null
+                                  ? Text(
+                                      "Upload Your Image",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : Text("")
                             ],
                           ),
                           color: Colors.white,
