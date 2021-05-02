@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:skin_cancer_app/FirstScreen.dart';
 import 'package:skin_cancer_app/constants.dart';
-import 'package:skin_cancer_app/dashboard.dart';
 import 'signUp.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import "package:http/http.dart" as http;
+import 'dart:io' show Platform;
 
 import 'dart:async';
 import 'dart:convert' show json;
+
+enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -88,6 +90,7 @@ class LoginState extends State<LoginScreen> {
 
   bool showSpinner = false;
   bool _obscureText = true;
+
   Widget _buildBody() {
     GoogleSignInAccount user = _currentUser;
     if (user != null) {
@@ -142,9 +145,12 @@ class LoginState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _auth = FirebaseAuth.instance;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  String errorMessage;
 
   GoogleSignInAccount _currentUser;
   String _contactText = '';
+
   @override
   void initState() {
     super.initState();
@@ -162,150 +168,198 @@ class LoginState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         body: ModalProgressHUD(
-      inAsyncCall: showSpinner,
-      child: Form(
-          key: _formKey,
-          child: Padding(
-              padding: EdgeInsets.all(10),
-              child: ListView(
-                children: <Widget>[
-                  Icon(
-                    Icons.person,
-                    color: Colors.black,
-                    size: 100.0,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: TextFormField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      // ignore: missing_return
-                      validator: (String value) {
-                        bool emailValid = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(value);
-                        if (!emailValid) {
-                          return 'Please enter a valid e-mail address';
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0)),
+          inAsyncCall: showSpinner,
+          child: Form(
+              key: _formKey,
+              child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: ListView(
+                    children: <Widget>[
+                      Icon(
+                        Icons.person,
+                        color: Colors.black,
+                        size: 100.0,
                       ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: TextFormField(
-                      obscureText: _obscureText,
-                      controller: passwordController,
-                      // ignore: missing_return
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0)),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          // ignore: missing_return
+                          validator: (String value) {
+                            bool emailValid = RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(value);
+                            if (!emailValid) {
+                              return 'Please enter a valid e-mail address';
+                            }
                           },
-                          child: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            semanticLabel: _obscureText
-                                ? 'show password'
-                                : 'hide password',
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            contentPadding:
+                                EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      //forgot password screen
-                    },
-                    textColor: Colors.teal,
-                    child: Text('Forgot Password'),
-                  ),
-                  Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(
-                              color: Color.fromRGBO(0, 160, 227, 1))),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          print(emailController.text);
-                          print(passwordController.text);
-                          try {
-                            setState(() {
-                              showSpinner = true;
-                            });
-                            final occurUser =
-                                await _auth.signInWithEmailAndPassword(
-                                    email: emailController.text,
-                                    password: passwordController.text);
-                            if (occurUser != null) {
-                              print("User Occur at DataBase");
-                              Navigator.pushReplacement(
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: TextFormField(
+                          obscureText: _obscureText,
+                          controller: passwordController,
+                          // ignore: missing_return
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            contentPadding:
+                                EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0)),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                              child: Icon(
+                                _obscureText
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                semanticLabel: _obscureText
+                                    ? 'show password'
+                                    : 'hide password',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          //forgot password screen
+                        },
+                        textColor: Colors.teal,
+                        child: Text('Forgot Password'),
+                      ),
+                      Container(
+                        height: 50,
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(
+                                  color: Color.fromRGBO(0, 160, 227, 1))),
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              print(emailController.text);
+                              print(passwordController.text);
+                              try {
+                                setState(() {
+                                  showSpinner = true;
+                                });
+                                final occurUser =
+                                    await _auth.signInWithEmailAndPassword(
+                                        email: emailController.text,
+                                        password: passwordController.text);
+                                if (occurUser != null) {
+                                  print("User Occur at DataBase");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FirstScreen()),
+                                  );
+                                }
+                                setState(() {
+                                  showSpinner = false;
+                                });
+                              } catch (e) {
+                                String errorMessage;
+                                if (Platform.isAndroid) {
+                                  switch (e.message) {
+                                    case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+                                      errorMessage =
+                                          "There is no user with this e-mail address";
+                                      break;
+                                    case 'The password is invalid or the user does not have a password.':
+                                      errorMessage =
+                                          "The password is incorrect";
+                                      break;
+                                    case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
+                                      errorMessage =
+                                          "A Network error has occurred. Please Try Again";
+                                      break;
+                                    // ...
+                                    default:
+                                      print(
+                                          'Case ${e.message} is not yet implemented');
+                                  }
+                                } else if (Platform.isIOS) {
+                                  switch (e.code) {
+                                    case 'Error 17011':
+                                      errorMessage =
+                                          "There is no user with this e-mail address";
+                                      break;
+                                    case 'Error 17009':
+                                      errorMessage =
+                                          "The password is incorrect";
+                                      break;
+                                    case 'Error 17020':
+                                      errorMessage =
+                                          "A Network error has occurred. Please Try Again";
+                                      break;
+                                    default:
+                                      print(
+                                          'Case ${e.message} is not yet implemented');
+                                  }
+                                }
+                                print('The error is $errorMessage');
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                  content: new Text('Error: $errorMessage'),
+                                  duration: new Duration(seconds: 10),
+                                ));
+                                setState(() {
+                                  showSpinner = false;
+                                });
+                              }
+                            }
+                          },
+                          padding: EdgeInsets.all(10.0),
+                          color: Colors.teal,
+                          textColor: Colors.white,
+                          child: Text("Login", style: TextStyle(fontSize: 20)),
+                        ),
+                      ),
+                      Container(
+                          child: Row(
+                        children: <Widget>[
+                          Text("Don't have an account?"),
+                          FlatButton(
+                            textColor: Colors.teal,
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            onPressed: () {
+                              //signup screen
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => FirstScreen()),
+                                    builder: (context) => SignUp()),
                               );
-                            }
-                            setState(() {
-                              showSpinner = false;
-                            });
-                          } catch (e) {
-                            print(e);
-                          }
-                        }
-                      },
-                      padding: EdgeInsets.all(10.0),
-                      color: Colors.teal,
-                      textColor: Colors.white,
-                      child: Text("Login", style: TextStyle(fontSize: 20)),
-                    ),
-                  ),
-                  Container(
-                      child: Row(
-                    children: <Widget>[
-                      Text("Don't have an account?"),
-                      FlatButton(
-                        textColor: Colors.teal,
-                        child: Text(
-                          'Sign up',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onPressed: () {
-                          //signup screen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignUp()),
-                          );
-                        },
-                      )
+                            },
+                          )
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      )),
+                      Container(child: _buildBody())
                     ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  )),
-                  Container(child: _buildBody())
-                ],
-              ))),
-    ));
+                  ))),
+        ));
   }
 }
