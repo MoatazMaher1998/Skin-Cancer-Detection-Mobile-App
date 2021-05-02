@@ -292,7 +292,7 @@ class _UploadState extends State<Upload> {
                                   padding: EdgeInsets.all(10.0),
                                   color: Colors.teal,
                                   textColor: Colors.white,
-                                  child: Text("Upload",
+                                  child: Text("Get Results",
                                       style: TextStyle(fontSize: 15)),
                                 ),
                               ),

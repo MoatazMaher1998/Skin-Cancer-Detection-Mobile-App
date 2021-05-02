@@ -19,22 +19,19 @@ class TestsHistory extends StatefulWidget {
 
 class _TestsHistory extends State<TestsHistory> {
   String name;
-  Map<String,dynamic> results;
+  Map<String, dynamic> results;
   int lengthOfResults;
-  List<Test> dummyHistoryList =[];
+  List<Test> dummyHistoryList = [];
   String email;
-
+  bool showSpinner = true;
   void initState() {
     super.initState();
     getUser();
   }
 
-  void createTheListView(){
-    if (lengthOfResults==0){
-
-    }
-    else {
-      print(results);
+  void createTheListView() {
+    if (lengthOfResults == 0) {
+    } else {
       String Source = "https://alexunicovidapi.s3-eu-west-1.amazonaws.com/";
       for (MapEntry e in results.entries) {
         var Date = e.value["date"].toString().split(" ")[0];
@@ -42,25 +39,14 @@ class _TestsHistory extends State<TestsHistory> {
         var image = e.value["Image"].toString();
         email = email.replaceAll("@", "%40");
         String Path = "$Source$email/$image";
-        //print(Path);
-        // print(Date);
-        // print(percentage);
-        // print(image);
-        dummyHistoryList.add(
-            Test(imagePath: Path, result: percentage, date: Date));
-        //print("Value ${e.value["date"]}");
+        dummyHistoryList
+            .add(Test(imagePath: Path, result: percentage, date: Date));
       }
+      setState(() {
+        showSpinner = false;
+      });
     }
-
-    }
-
-
-  // List<Test> dummyHistoryList = [
-  //   Test(index: 0, date: "25.04.2021", result: "98% Positive"),
-  //   Test(index: 1, date: "25.04.2021", result: "100% Negative"),
-  //   Test(index: 2, date: "25.04.2021", result: "99% Positive"),
-  // ];
-
+  }
 
   void getUser() async {
     bool result = await Userdetails().Userislogged();
@@ -73,18 +59,15 @@ class _TestsHistory extends State<TestsHistory> {
         name = username;
       });
     }
-    print(results);
-    print(lengthOfResults);
-    print(email);
     createTheListView();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     return ModalProgressHUD(
+      inAsyncCall: showSpinner,
+      color: Colors.black,
+      opacity: 0.9,
       child: Scaffold(
         appBar: AppBar(
           actions: <Widget>[
@@ -134,8 +117,16 @@ class _TestsHistory extends State<TestsHistory> {
             itemCount: dummyHistoryList.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                leading: Image.network('${dummyHistoryList[index].imagePath}'),
-                title: Text('${dummyHistoryList[index].result}'),
+                leading: Container(
+                  width: 55,
+                  height: 55,
+                  child: Image.network(
+                    '${dummyHistoryList[index].imagePath}',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                title: Text(
+                    '${dummyHistoryList[index].result} Skin Cancer {type}'),
                 trailing: Text('${dummyHistoryList[index].date}'),
               );
             },
