@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:skin_cancer_app/FirstScreen.dart';
+import 'package:skin_cancer_app/userdetails.dart';
 import 'signUp.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import "package:http/http.dart" as http;
@@ -241,8 +242,20 @@ class LoginState extends State<LoginScreen> {
                       ),
                       // ignore: deprecated_member_use
                       FlatButton(
-                        onPressed: () {
-                          //forgot password screen
+                        onPressed: () async {
+                          if (emailController.text == null || emailController.text==""){
+                            print("Error have to enter the email First");
+                          }
+                          else{
+                            bool emailOccur = await Userdetails().checkEmail(emailController.text);
+                            if (emailOccur == false){
+                              print("The Entered Email don't have account please check the email before forgetting password");
+                            }
+                            else{
+                              // layout for forget Passwordd..
+                              //Then Logic Completee...
+                            }
+                          }
                         },
                         textColor: Colors.teal,
                         child: Text('Forgot Password'),
