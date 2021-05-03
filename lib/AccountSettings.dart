@@ -28,29 +28,7 @@ class EditSettingsState extends State<AccountSettings> {
   TextEditingController DOBController = TextEditingController();
   String genderController = "MALE";
   // The way to retrieve the data ....
-  // void getData() async {
-  //   var document = await _firestore.collection('Information').get();
-  //   for (var message in document.docs) {
-  //     print(message.data());
-  //   }
-  // }
-  // Method to Update the Databaase....
-  // void setData() async {
-  //   await _firestore.collection("Information").add({
-  //     "DataOfBirth": "06/20/1998",
-  //     "Gender": "Male",
-  //     "email": "ahmed@gmail.com",
-  //     "result" : {
-  //       "result1" : {
-  //         "Image": "1.png",
-  //         "cellType" : "1",
-  //         "percentage": "60",
-  //         "data": "lsaa"
-  //       },
-  //
-  //     }
-  //   });
-  // }
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +36,6 @@ class EditSettingsState extends State<AccountSettings> {
 
   @override
   Widget build(BuildContext context) {
-    //setData();
     Userdetails().getData();
     return Scaffold(
       appBar: AppBar(
@@ -173,8 +150,9 @@ class EditSettingsState extends State<AccountSettings> {
                   ),
                 ),
                 Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Row(children: <Widget>[
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: Row(
+                    children: <Widget>[
                       // Text("Gender",
                       //  style: TextStyle(fontSize: 15.0),),
                       // RadioGroup<String>.builder(
@@ -188,7 +166,9 @@ class EditSettingsState extends State<AccountSettings> {
                       //     item,
                       //   ),
                       // )
-                    ])),
+                    ],
+                  ),
+                ),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: CustomRadioButton(
@@ -216,22 +196,23 @@ class EditSettingsState extends State<AccountSettings> {
                   ),
                 ),
                 Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    // ignore: deprecated_member_use
-                    child: RaisedButton(
-                      textColor: Colors.white,
-                      color: Colors.teal,
-                      child: Text('Save'),
-                      onPressed: () {
-                        setState(() {
-                          if (_formKey.currentState.validate()) {
-                            debugPrint(
-                                "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
-                          }
-                        });
-                      },
-                    )),
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  // ignore: deprecated_member_use
+                  child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.teal,
+                    child: Text('Save'),
+                    onPressed: () {
+                      setState(() {
+                        if (_formKey.currentState.validate()) {
+                          debugPrint(
+                              "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
+                        }
+                      });
+                    },
+                  ),
+                ),
               ],
             ),
           ),

@@ -31,6 +31,9 @@ class _TestsHistory extends State<TestsHistory> {
 
   void createTheListView() {
     if (lengthOfResults == 0) {
+      setState(() {
+        showSpinner = false;
+      });
     } else {
       String Source = "https://alexunicovidapi.s3-eu-west-1.amazonaws.com/";
       for (MapEntry e in results.entries) {
