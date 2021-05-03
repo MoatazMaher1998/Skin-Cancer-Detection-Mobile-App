@@ -22,6 +22,15 @@ class _UploadState extends State<Upload> {
   var result;
   bool showSpinner = false;
   final _firestore = FirebaseFirestore.instance;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  GlobalKey<ScaffoldState> showError(String error){
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: new Text(error),
+      duration: new Duration(seconds: 10),
+    ));
+  }
+
 
   Future _getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
