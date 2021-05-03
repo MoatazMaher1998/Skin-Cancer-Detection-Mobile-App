@@ -81,7 +81,7 @@ class _TestsHistory extends State<TestsHistory> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                 // Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AccountSettings()),

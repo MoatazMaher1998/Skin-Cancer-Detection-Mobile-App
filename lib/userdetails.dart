@@ -15,14 +15,14 @@ class Userdetails {
   Map<String, dynamic> _results;
   int _lengthOfResults;
 
-  Future<User> _getCurrentUser() async {
+  Future<User> getCurrentUser() async {
     final user = await _auth.currentUser;
     _loggedInUser = user;
     return _loggedInUser;
   }
 
   void getData() async {
-    _loggedInUser = await _getCurrentUser();
+    _loggedInUser = await getCurrentUser();
     var document = await _firestore.collection('Information').get();
     var messages = document.docs;
     for (var message in messages) {
@@ -90,7 +90,7 @@ class Userdetails {
   }
 
   Future<bool> Userislogged() async {
-    _loggedInUser = await _getCurrentUser();
+    _loggedInUser = await getCurrentUser();
     if (_loggedInUser == null) {
       return false;
     }
@@ -98,7 +98,7 @@ class Userdetails {
   }
 
   Future<String> getUserName() async {
-    _loggedInUser = await _getCurrentUser();
+    _loggedInUser = await getCurrentUser();
     return _loggedInUser.displayName.toString();
   }
 }
