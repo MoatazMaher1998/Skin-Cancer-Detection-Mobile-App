@@ -26,7 +26,7 @@ class EditSettingsState extends State<AccountSettings> {
   TextEditingController confirmPasswordController = TextEditingController();
   // ignore: non_constant_identifier_names
   TextEditingController DOBController = TextEditingController();
-  String genderController;
+  String genderController = "MALE";
   // The way to retrieve the data ....
   // void getData() async {
   //   var document = await _firestore.collection('Information').get();

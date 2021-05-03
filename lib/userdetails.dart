@@ -25,13 +25,8 @@ class Userdetails {
     _loggedInUser = await _getCurrentUser();
     var document = await _firestore.collection('Information').get();
     var messages = document.docs;
-    //print(messages);
     for (var message in messages) {
-      //print(document.docs.length);
-      //print(message.id);
       var dataEmails = message.data()["email"].toString();
-      //print(dataEmails);
-      //print(_loggedInUser.email);
       if (dataEmails == _loggedInUser.email) {
         Usermessage = await message;
         _documentId = await message.id;
@@ -40,6 +35,17 @@ class Userdetails {
     }
     parseUserData();
   }
+  Future<bool> checkEmail(String email) async{
+    var document = await _firestore.collection('Information').get();
+    var messages = document.docs;
+    for (var message in messages) {
+      var dataEmails = message.data()["email"].toString();
+      if (dataEmails == email) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   void parseUserData() {
     _email = Usermessage["email"].toString();
@@ -47,11 +53,6 @@ class Userdetails {
     _DataOfBirth = Usermessage["DataOfBirth"].toString();
     _results = Usermessage["result"];
     _lengthOfResults = _results.length;
-    // print(_email);
-    // print(_Gender);
-    // print(_DataOfBirth);
-    // print(_results);
-    // print(_lengthOfResults);
   }
 
   Future<String> getEmail() async {
