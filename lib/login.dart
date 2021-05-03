@@ -22,7 +22,7 @@ class LoginScreen extends StatefulWidget {
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   clientId:
-  'http://315856601755-gaius6c2t3nvfpkt2ne8659dbs6lksdk.apps.googleusercontent.com/',
+      'http://315856601755-gaius6c2t3nvfpkt2ne8659dbs6lksdk.apps.googleusercontent.com/',
   scopes: [
     'email',
   ],
@@ -62,12 +62,12 @@ class LoginState extends State<LoginScreen> {
   String _pickFirstNamedContact(Map<String, dynamic> data) {
     final List<dynamic> connections = data['connections'];
     final Map<String, dynamic> contact = connections.firstWhere(
-          (dynamic contact) => contact['names'] != null,
+      (dynamic contact) => contact['names'] != null,
       orElse: () => null,
     );
     if (contact != null) {
       final Map<String, dynamic> name = contact['names'].firstWhere(
-            (dynamic name) => name['displayName'] != null,
+        (dynamic name) => name['displayName'] != null,
         orElse: () => null,
       );
       if (name != null) {
@@ -91,6 +91,7 @@ class LoginState extends State<LoginScreen> {
 
   bool showSpinner = false;
   bool _obscureText = true;
+
 
   Widget _buildBody() {
     GoogleSignInAccount user = _currentUser;
@@ -148,7 +149,12 @@ class LoginState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String errorMessage;
-
+  GlobalKey<ScaffoldState> showError(String error){
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: new Text(error),
+      duration: new Duration(seconds: 10),
+    ));
+  }
   GoogleSignInAccount _currentUser;
   String _contactText = '';
 
@@ -157,7 +163,6 @@ class LoginState extends State<LoginScreen> {
     super.initState();
 
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-
       setState(() {
         print(account);
         _currentUser = account;
@@ -167,8 +172,7 @@ class LoginState extends State<LoginScreen> {
         _handleGetContact(_currentUser);
       }
     });
-    print("WASKK");
-    print(_currentUser);
+
     _googleSignIn.signInSilently();
   }
 
@@ -197,7 +201,7 @@ class LoginState extends State<LoginScreen> {
                           // ignore: missing_return
                           validator: (String value) {
                             bool emailValid = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                 .hasMatch(value);
                             if (!emailValid) {
                               return 'Please enter a valid e-mail address';
@@ -206,7 +210,7 @@ class LoginState extends State<LoginScreen> {
                           decoration: InputDecoration(
                             hintText: 'Email',
                             contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
+                                EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0)),
                           ),
@@ -226,7 +230,7 @@ class LoginState extends State<LoginScreen> {
                           decoration: InputDecoration(
                             hintText: 'Password',
                             contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
+                                EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 15.0),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0)),
                             suffixIcon: GestureDetector(
@@ -250,17 +254,31 @@ class LoginState extends State<LoginScreen> {
                       // ignore: deprecated_member_use
                       FlatButton(
                         onPressed: () async {
-                          if (emailController.text == null || emailController.text==""){
-                            print("Error have to enter the email First");
-                          }
-                          else{
+                          if (emailController.text == null ||
+                              emailController.text == "") {
+                            showError('Error: Have to enter the email first.');
+
+                          } else {
                             bool emailOccur = await Userdetails().checkEmail(emailController.text);
-                            if (emailOccur == false){
-                              print("The Entered Email don't have account please check the email before forgetting password");
-                            }
-                            else{
-                              // layout for forget Passwordd..
-                              //Then Logic Completee...
+                            if (emailOccur == false) {
+                              showError("There is no account with this email please Sign Up");
+                            } else {
+                              showError("Please check your email and reset password then return to re-login with your new password");
+                              _auth.sendPasswordResetEmail(email: emailController.text,).then((onVal) {
+
+                              }).whenComplete(() {
+                                //showError("Please check your email and reset password then return to re-login with your new password");
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => FirstScreen(),
+                                  ),
+                                );
+                              }).catchError((onError) {
+                                if (onError.toString().contains("ERROR_USER_NOT_FOUND")) {
+                                    print("User Not Found");
+                                } else if (onError.toString().contains("An internal error has occurred")) {
+                                    print("Internal Error");
+                                }
+                              });
                             }
                           }
                         },
@@ -285,11 +303,11 @@ class LoginState extends State<LoginScreen> {
                                   showSpinner = true;
                                 });
                                 final occurUser =
-                                await _auth.signInWithEmailAndPassword(
-                                    email: emailController.text,
-                                    password: passwordController.text);
+                                    await _auth.signInWithEmailAndPassword(
+                                        email: emailController.text,
+                                        password: passwordController.text);
                                 if (occurUser != null) {
-                                  print("User Occur at DataBase");
+                                  //print("User Occur at DataBase");
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -305,17 +323,17 @@ class LoginState extends State<LoginScreen> {
                                   switch (e.message) {
                                     case 'There is no user record corresponding to this identifier. The user may have been deleted.':
                                       errorMessage =
-                                      "There is no user with this e-mail address";
+                                          "There is no user with this e-mail address";
                                       break;
                                     case 'The password is invalid or the user does not have a password.':
                                       errorMessage =
-                                      "The password is incorrect";
+                                          "The password is incorrect";
                                       break;
                                     case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
                                       errorMessage =
-                                      "A Network error has occurred. Please Try Again";
+                                          "A Network error has occurred. Please Try Again";
                                       break;
-                                  // ...
+                                    // ...
                                     default:
                                       print(
                                           'Case ${e.message} is not yet implemented');
@@ -324,15 +342,15 @@ class LoginState extends State<LoginScreen> {
                                   switch (e.code) {
                                     case 'Error 17011':
                                       errorMessage =
-                                      "There is no user with this e-mail address";
+                                          "There is no user with this e-mail address";
                                       break;
                                     case 'Error 17009':
                                       errorMessage =
-                                      "The password is incorrect";
+                                          "The password is incorrect";
                                       break;
                                     case 'Error 17020':
                                       errorMessage =
-                                      "A Network error has occurred. Please Try Again";
+                                          "A Network error has occurred. Please Try Again";
                                       break;
                                     default:
                                       print(
@@ -341,10 +359,7 @@ class LoginState extends State<LoginScreen> {
                                 }
                                 print('The error is $errorMessage');
                                 // ignore: deprecated_member_use
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                  content: new Text('Error: $errorMessage'),
-                                  duration: new Duration(seconds: 10),
-                                ));
+                                showError('Error: $errorMessage');
                                 setState(() {
                                   showSpinner = false;
                                 });
@@ -359,27 +374,27 @@ class LoginState extends State<LoginScreen> {
                       ),
                       Container(
                           child: Row(
-                            children: <Widget>[
-                              Text("Don't have an account?"),
-                              // ignore: deprecated_member_use
-                              FlatButton(
-                                textColor: Colors.teal,
-                                child: Text(
-                                  'Sign up',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                onPressed: () {
-                                  //signup screen
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignUp()),
-                                  );
-                                },
-                              )
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.center,
-                          )),
+                        children: <Widget>[
+                          Text("Don't have an account?"),
+                          // ignore: deprecated_member_use
+                          FlatButton(
+                            textColor: Colors.teal,
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            onPressed: () {
+                              //signup screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUp()),
+                              );
+                            },
+                          )
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      )),
                       Container(child: _buildBody())
                     ],
                   ))),
