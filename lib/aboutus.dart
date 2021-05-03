@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:skin_cancer_app/profile.dart';
 
 class Developer {
   final String name;
@@ -16,42 +15,83 @@ class Developer {
 }
 
 List<Developer> DevelopersList = [
-  Developer("Moataz Maher", "Moatazmaher1998@gmail.com", "Github", "LinkedIn",
-      "Facebook", "Image", "Backend & Flutter Developer"),
-  Developer("Tarek Osama", "TarekOsama@gmail.com", "Github", "LinkedIn",
-      "Facebook", "Image", "Machine learning & Firebase"),
-  Developer("Ahmed Refeat", "Ahmedrefeat122@gmail.com", "Github", "LinkedIn",
-      "Facebook", "Image", "API's & Flutter Developer"),
-  Developer("Zeyad Mostafa", "ZeyadMoustafa1111@gmail.com", "Github",
-      "LinkedIn", "Facebook", "Image", "Machine learning "),
+  Developer(
+      "Moataz Maher",
+      "Moatazmaher1998@gmail.com",
+      "Github",
+      "LinkedIn",
+      "Facebook",
+      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/22815545_1907949472563420_7551933613333064338_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=174925&_nc_ohc=b0EINSzLYgIAX_aCIcq&_nc_ht=scontent.faly3-2.fna&oh=9595706e0a87ec679f564b0885784fd7&oe=60B58C5C",
+      "Backend & Flutter Developer"),
+  Developer(
+      "Tarek Osama",
+      "TarekOsama@gmail.com",
+      "Github",
+      "LinkedIn",
+      "Facebook",
+      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/995810_484478471629400_234129684_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=de6eea&_nc_ohc=kZLsALB7ZioAX9Ixsop&_nc_ht=scontent.faly3-2.fna&oh=ef8a89537d1cc6a4c1eaacf2c0fee18b&oe=60B7475D",
+      "Machine learning & Firebase"),
+  Developer(
+      "Ahmed Refaat",
+      "Ahmedrefeat122@gmail.com",
+      "Github",
+      "LinkedIn",
+      "Facebook",
+      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/10500304_10152137883526525_1504206721351615353_n.jpg?_nc_cat=102&ccb=1-3&_nc_sid=cdbe9c&_nc_ohc=nK80OJsjLRAAX-yTWTh&_nc_ht=scontent.faly3-2.fna&oh=deefc33f1207c8ecd621904dd8d99df3&oe=60B5B1D8",
+      "API's & Flutter Developer"),
+  Developer(
+      "Zeyad Mostafa",
+      "ZeyadMoustafa1111@gmail.com",
+      "Github",
+      "LinkedIn",
+      "Facebook",
+      "https://scontent.faly3-2.fna.fbcdn.net/v/t31.18172-8/10448611_748231351894858_2653410489194491622_o.jpg?_nc_cat=108&ccb=1-3&_nc_sid=ba80b0&_nc_ohc=ilTVAc90bDgAX-SN8Id&_nc_ht=scontent.faly3-2.fna&oh=b2984456cac7bf8d60a124d1291af9d9&oe=60B46BB2",
+      "Machine learning "),
   Developer("Mohamed Lotfy", "TarekOsama@gmail.com", "Github", "LinkedIn",
       "Facebook", "Image", "Machine learning"),
-  Developer("Hossam Moh.", "TarekOsama@gmail.com", "Github", "LinkedIn",
-      "Facebook", "Image", "Machine learning"),
-  Developer("Rashad Sallam", "TarekOsama@gmail.com", "Github", "LinkedIn",
-      "Facebook", "Image", "Machine learning"),
+  Developer(
+      "Hossam Moh.",
+      "TarekOsama@gmail.com",
+      "Github",
+      "LinkedIn",
+      "Facebook",
+      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/1546178_763548063673161_36130896_n.jpg?_nc_cat=103&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=C4ENrFVItn4AX_WWEwP&_nc_ht=scontent.faly3-2.fna&oh=0e5d149c30b9e2f210ef366d8bff3bba&oe=60B5E4C5",
+      "Machine learning"),
+  Developer(
+      "Rashad Sallam",
+      "TarekOsama@gmail.com",
+      "Github",
+      "LinkedIn",
+      "Facebook",
+      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/1488665_724760300882349_2098786387_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=cdbe9c&_nc_ohc=YnuV6-ya9igAX-gtZ4n&_nc_ht=scontent.faly3-2.fna&oh=36cd735777548be5594e3093572a847a&oe=60B5EA87",
+      "Machine learning"),
 ];
-TableRow GetDeveloper(Developer devInfo) {
-  return TableRow(
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Text(
-          "   ${devInfo.name}",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(child: Text("   ${devInfo.role}")),
-      ),
-    ],
-  );
+
+class AboutUs extends StatefulWidget {
+  @override
+  _AboutUs createState() => _AboutUs();
 }
 
-class AboutUs extends StatelessWidget {
+class _AboutUs extends State<AboutUs> {
+  DataRow GetDeveloper(Developer devInfo) {
+    return DataRow(
+      cells: <DataCell>[
+        DataCell(
+            Text(
+              '${devInfo.name}',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ), onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Profile(developer: devInfo)),
+          );
+        }),
+        DataCell(Text('${devInfo.role}')),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,31 +135,49 @@ class AboutUs extends StatelessWidget {
             Expanded(
               flex: 6,
               child: Column(children: [
-                Table(
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FlexColumnWidth(130),
-                      1: FlexColumnWidth(230),
-                    },
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    children: <TableRow>[
-                      GetDeveloper(DevelopersList[0]),
-                      GetDeveloper(DevelopersList[1]),
-                      GetDeveloper(DevelopersList[2]),
-                      GetDeveloper(DevelopersList[3]),
-                      GetDeveloper(DevelopersList[4]),
-                      GetDeveloper(DevelopersList[5]),
-                      GetDeveloper(DevelopersList[6]),
-                    ]),
-                SizedBox(height: 20),
-                Text(
-                  "Supervised By",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        'Name',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Main Role',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                  dataRowHeight: 40,
+                  horizontalMargin: 2,
+                  rows: <DataRow>[
+                    GetDeveloper(DevelopersList[0]),
+                    GetDeveloper(DevelopersList[1]),
+                    GetDeveloper(DevelopersList[2]),
+                    GetDeveloper(DevelopersList[3]),
+                    GetDeveloper(DevelopersList[4]),
+                    GetDeveloper(DevelopersList[5]),
+                    GetDeveloper(DevelopersList[6])
+                  ],
                 ),
                 SizedBox(height: 20),
-                Text(
-                  "Dr. Nayera Mohammed \n\n Dr. Ahmed ELtarras",
-                  style: TextStyle(fontSize: 15),
-                )
+                Row(
+                  children: [
+                    Text(
+                      "     Supervised By",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 55),
+                    Text(
+                      "Dr. Nayera  \n\nDr. Ahmed ELtarras",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
               ]),
             ),
           ],
@@ -128,16 +186,3 @@ class AboutUs extends StatelessWidget {
     );
   }
 }
-//  TableR
-//  leading: Container(
-//    width: 55,
-//    height: 55,
-//    child: Image.network(
-//      '${dummyHistoryList[index].imagePath}',
-//      fit: BoxFit.fill,
-//    ),
-//  ),
-//  title: Text(
-//      '${dummyHistoryList[index].result} Skin Cancer {type}'),
-
-// trailing: Text('${dummyHistoryList[index].date}'),

@@ -81,7 +81,7 @@ class _TestsHistory extends State<TestsHistory> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                 // Navigator.pop(context);
+                  // Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AccountSettings()),
@@ -106,13 +106,15 @@ class _TestsHistory extends State<TestsHistory> {
               tooltip: 'Log out',
             )
           ],
-          title: Text(
-            "  $name",
-            style: TextStyle(
-              color: Colors.teal,
-              fontSize: 23,
-            ),
-          ),
+          title: name == null
+              ? Text("")
+              : Text(
+                  "  $name",
+                  style: TextStyle(
+                    color: Colors.teal,
+                    fontSize: 23,
+                  ),
+                ),
           backgroundColor: Colors.white,
         ),
         body: Container(
