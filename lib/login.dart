@@ -7,11 +7,13 @@ import 'signUp.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import "package:http/http.dart" as http;
 import 'dart:io' show Platform;
-
 import 'dart:async';
 import 'dart:convert' show json;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
+final _firestore = FirebaseFirestore.instance;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -21,10 +23,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
-  clientId:
-      'http://315856601755-gaius6c2t3nvfpkt2ne8659dbs6lksdk.apps.googleusercontent.com/',
   scopes: [
-    'email',
+    'https://www.googleapis.com/auth/user.birthday.read', 'https://www.googleapis.com/auth/user.gender.read'
   ],
 );
 
@@ -79,15 +79,41 @@ class LoginState extends State<LoginScreen> {
 
   Future<void> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
-      print("WASLTT");
+      GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      print("WASLTT 1");
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      print("WASLTT 2");
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      final UserCredential googleUserCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      print("WASLT 3 $googleUserCredential");
+      if (googleUserCredential.additionalUserInfo.isNewUser){
+        googleUserCredential.user.updateProfile(
+            displayName: googleUserCredential.user.displayName, photoURL: googleUserCredential.user.photoURL);
+            await _firestore.collection("Information").add({
+              "DataOfBirth": "22/2/2222",
+              "Gender": "MALE",
+              "email": googleUserCredential.user.email,
+              "result": {},
+            });
+      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FirstScreen()),
+      );
     } catch (error) {
       debugPrint("TEST error");
       print(error);
     }
   }
 
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+//  Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   bool showSpinner = false;
   bool _obscureText = true;
@@ -110,7 +136,6 @@ class LoginState extends State<LoginScreen> {
           Text(_contactText),
           ElevatedButton(
             child: const Text('SIGN OUT'),
-            onPressed: _handleSignOut,
           ),
           ElevatedButton(
             child: const Text('REFRESH'),
@@ -395,7 +420,27 @@ class LoginState extends State<LoginScreen> {
                         ],
                         mainAxisAlignment: MainAxisAlignment.center,
                       )),
-                      Container(child: _buildBody())
+                      Container(child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          ElevatedButton(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    child: Image.asset('images/googleLogo.png',
+                                        width: 20, height: 20),
+                                  ),
+                                  TextSpan(
+                                    text: " Sign in using Google",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onPressed: _handleSignIn,
+                          ),
+                        ],
+                      ))
                     ],
                   ))),
         ));
