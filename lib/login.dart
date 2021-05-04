@@ -10,6 +10,7 @@ import 'dart:io' show Platform;
 import 'dart:async';
 import 'dart:convert' show json;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
@@ -29,60 +30,24 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
 );
 
 class LoginState extends State<LoginScreen> {
-  Future<void> _handleGetContact(GoogleSignInAccount user) async {
-    setState(() {
-      _contactText = "Loading contact info...";
-    });
-    final http.Response response = await http.get(
-      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
-          '?requestMask.includeField=person.names'),
-      headers: await user.authHeaders,
+
+  Future<List> getGenderandDOB() async {
+    final headers = await _googleSignIn.currentUser.authHeaders;
+    final r = await http.get(Uri.parse("https://people.googleapis.com/v1/people/me?personFields=genders,birthdays&key="),
+        headers: {
+          "Authorization": headers["Authorization"]
+        }
     );
-    if (response.statusCode != 200) {
-      setState(() {
-        _contactText = "People API gave a ${response.statusCode} "
-            "response. Check logs for details.";
-      });
-      print('People API ${response.statusCode} response: ${response.body}');
-      return;
-    } else {
-      print("People API Error $response , ${response.statusCode}");
-    }
-    final Map<String, dynamic> data = json.decode(response.body);
-    final String namedContact = _pickFirstNamedContact(data);
-    setState(() {
-      if (namedContact != null) {
-        _contactText = "I see you know $namedContact!";
-      } else {
-        _contactText = "No contacts to display.";
-      }
-    });
+    final response = jsonDecode(r.body);
+    String birthdate = response["birthdays"][1]["date"]["day"].toString() + "/" + response["birthdays"][1]["date"]["month"].toString() + "/" + response["birthdays"][1]["date"]["year"].toString();
+    return [response["genders"][0]["formattedValue"],birthdate];
   }
 
-  String _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic> connections = data['connections'];
-    final Map<String, dynamic> contact = connections.firstWhere(
-      (dynamic contact) => contact['names'] != null,
-      orElse: () => null,
-    );
-    if (contact != null) {
-      final Map<String, dynamic> name = contact['names'].firstWhere(
-        (dynamic name) => name['displayName'] != null,
-        orElse: () => null,
-      );
-      if (name != null) {
-        return name['displayName'];
-      }
-    }
-    return null;
-  }
 
   Future<void> _handleSignIn() async {
     try {
       GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-      print("WASLTT 1");
       GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      print("WASLTT 2");
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -90,13 +55,13 @@ class LoginState extends State<LoginScreen> {
 
       // Once signed in, return the UserCredential
       final UserCredential googleUserCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      print("WASLT 3 $googleUserCredential");
       if (googleUserCredential.additionalUserInfo.isNewUser){
         googleUserCredential.user.updateProfile(
             displayName: googleUserCredential.user.displayName, photoURL: googleUserCredential.user.photoURL);
+            List userData = await getGenderandDOB();
             await _firestore.collection("Information").add({
-              "DataOfBirth": "22/2/2222",
-              "Gender": "MALE",
+              "DataOfBirth": userData[1],
+              "Gender": userData[0],
               "email": googleUserCredential.user.email,
               "result": {},
             });
@@ -108,7 +73,6 @@ class LoginState extends State<LoginScreen> {
             builder: (context) => FirstScreen()),
       );
     } catch (error) {
-      debugPrint("TEST error");
       print(error);
     }
   }
@@ -118,55 +82,6 @@ class LoginState extends State<LoginScreen> {
   bool showSpinner = false;
   bool _obscureText = true;
 
-
-  Widget _buildBody() {
-    GoogleSignInAccount user = _currentUser;
-    if (user != null) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          ListTile(
-            leading: GoogleUserCircleAvatar(
-              identity: user,
-            ),
-            title: Text(user.displayName ?? ''),
-            subtitle: Text(user.email),
-          ),
-          const Text("Signed in successfully."),
-          Text(_contactText),
-          ElevatedButton(
-            child: const Text('SIGN OUT'),
-          ),
-          ElevatedButton(
-            child: const Text('REFRESH'),
-            onPressed: () => _handleGetContact(user),
-          ),
-        ],
-      );
-    } else {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          ElevatedButton(
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  WidgetSpan(
-                    child: Image.asset('images/googleLogo.png',
-                        width: 20, height: 20),
-                  ),
-                  TextSpan(
-                    text: " Sign in using Google",
-                  ),
-                ],
-              ),
-            ),
-            onPressed: _handleSignIn,
-          ),
-        ],
-      );
-    }
-  }
 
   var _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
@@ -186,19 +101,6 @@ class LoginState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      setState(() {
-        print(account);
-        _currentUser = account;
-      });
-
-      if (_currentUser != null) {
-        _handleGetContact(_currentUser);
-      }
-    });
-
-    _googleSignIn.signInSilently();
   }
 
   @override
