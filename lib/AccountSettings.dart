@@ -200,6 +200,7 @@ class EditSettingsState extends State<AccountSettings> {
                             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             child: TextFormField(
                               controller: oldPasswordController,
+                              obscureText: true,
                               // ignore: missing_return
                               validator: (String value) {
                                 if (value.isEmpty) {
@@ -250,15 +251,23 @@ class EditSettingsState extends State<AccountSettings> {
                               textColor: Colors.white,
                               color: Colors.teal,
                               child: Text('Change Password'),
-                              onPressed: () {
-                                setState(() {
-                                  if (_updatePWformKey.currentState
-                                      .validate()) {
+                              onPressed: () async{
+                                if (_updatePWformKey.currentState.validate()) {
                                     debugPrint(
-                                        "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
-                                  }
+                                        "SUCCESS + ${oldPasswordController.text} + ${confirmPasswordController.text} + ${newpasswordController.text}");
+                                    var res = EmailAuthProvider.credential(email: email, password: oldPasswordController.text.toString());
+                                    FirebaseAuth auth = FirebaseAuth.instance;
+                                    try{
+                                      var data = await auth.currentUser.reauthenticateWithCredential(res);
+                                      print("Correct Password has been entered");
+                                      updatePassword();
+                                    }catch(e){
+                                      print(e);
+                                    }
 
-                                });
+                                }
+
+
                               },
                             ),
                           ),
@@ -313,5 +322,10 @@ class EditSettingsState extends State<AccountSettings> {
     "DataOfBirth": DOBController.text.toString()
     });
     print("DATAA SAVED SUCCEFFULLYY");
+  }
+  void updatePassword() async{
+    final user = await Userdetails().getCurrentUser();
+    user.updatePassword(newpasswordController.text);
+    print("Password Have beeen changedd");
   }
 }
