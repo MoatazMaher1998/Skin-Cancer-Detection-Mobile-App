@@ -18,8 +18,8 @@ List<Developer> DevelopersList = [
   Developer(
       "Moataz Maher",
       "Moatazmaher1998@gmail.com",
-      "Github",
-      "LinkedIn",
+      "https://github.com/MoatazMaher1998",
+      "https://www.linkedin.com/in/moataz-maher-58a2b8146/",
       "Facebook",
       "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/22815545_1907949472563420_7551933613333064338_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=174925&_nc_ohc=b0EINSzLYgIAX_aCIcq&_nc_ht=scontent.faly3-2.fna&oh=9595706e0a87ec679f564b0885784fd7&oe=60B58C5C",
       "Backend & Flutter Developer"),
@@ -73,6 +73,7 @@ class AboutUs extends StatefulWidget {
 }
 
 class _AboutUs extends State<AboutUs> {
+  // ignore: non_constant_identifier_names
   DataRow GetDeveloper(Developer devInfo) {
     return DataRow(
       cells: <DataCell>[
@@ -133,7 +134,7 @@ class _AboutUs extends State<AboutUs> {
               ),
             ),
             Expanded(
-              flex: 6,
+              flex: 10,
               child: Column(children: [
                 DataTable(
                   columns: const <DataColumn>[
@@ -166,7 +167,7 @@ class _AboutUs extends State<AboutUs> {
                 Row(
                   children: [
                     Text(
-                      "     Supervised By",
+                      "       Supervised By",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
