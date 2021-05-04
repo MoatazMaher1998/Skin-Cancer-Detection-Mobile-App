@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:skin_cancer_app/constants.dart';
@@ -14,7 +15,7 @@ class AccountSettings extends StatefulWidget {
 }
 
 class EditSettingsState extends State<AccountSettings> {
-  //final _firestore = FirebaseFirestore.instance;
+  final _firestore = FirebaseFirestore.instance;
   DateTime selectedDate = DateTime.now();
   var _updateProfileformKey = GlobalKey<FormState>();
   var _updatePWformKey = GlobalKey<FormState>();
@@ -33,7 +34,7 @@ class EditSettingsState extends State<AccountSettings> {
   @override
   void initState() {
     super.initState();
-    getUser();
+    getNameAndDateAndGender();
   }
 
   @override
@@ -155,12 +156,21 @@ class EditSettingsState extends State<AccountSettings> {
                         color: Colors.teal,
                         child: Text('Save'),
                         onPressed: () {
-                          setState(() {
+
                             if (_updateProfileformKey.currentState.validate()) {
                               //updateProfile();
                               debugPrint(
-                                  "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
+                                  "SUCCESS + ${emailController.text} + ${nameController.text}  + ${DOBController.text} + $genderController");
+                              if (nameController.text == userName && DOBController.text == dateOfBirth && genderController==gender){
+                                print("No changes Happened");
+                              }
+                              else{
+                                //values has been changed..
+                                updateProfile();
+                              }
                             }
+                          setState(() {
+
                           });
                         },
                       ),
@@ -240,6 +250,7 @@ class EditSettingsState extends State<AccountSettings> {
                                     debugPrint(
                                         "SUCCESS + ${emailController.text} + ${nameController.text} + ${newpasswordController.text} + ${confirmPasswordController.text} + ${DOBController.text} + $genderController");
                                   }
+
                                 });
                               },
                             ),
@@ -265,20 +276,32 @@ class EditSettingsState extends State<AccountSettings> {
       });
     DOBController.text = DateFormat.yMMMd().format(selectedDate);
   }
-
-  void getUser() async {
+  String userName = "";
+  String dateOfBirth = "";
+  String gender = "";
+  String documentId;
+  void getNameAndDateAndGender() async {
     bool result = await Userdetails().Userislogged();
     if (result == true) {
-      String username = await Userdetails().getUserName();
-      String dateofBirth = await Userdetails().getdataOfBirth();
-      String gender = await Userdetails().getGender();
-      nameController.text = username;
-      DOBController.text = dateofBirth;
+      userName = await Userdetails().getUserName();
+      dateOfBirth = await Userdetails().getdataOfBirth();
+      gender = await Userdetails().getGender();
+      documentId = await Userdetails().getDocumentId();
+      nameController.text = userName;
+      DOBController.text = dateOfBirth;
       genderController = gender;
     }
   }
 
   void updateProfile() async {
     final user = await Userdetails().getCurrentUser();
+    user.updateProfile(displayName: nameController.text);
+    await _firestore
+        .collection("Information")
+        .doc(documentId)
+        .update({"Gender": '$genderController',
+    "DataOfBirth": DOBController.text.toString()
+    });
+    print("DATAA SAVED SUCCEFFULLYY");
   }
 }
