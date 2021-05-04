@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "669479875607-ghfe3e1ffe4r179n4hsj0oguehlqppmr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skin_cancer_app",
+            "certificate_hash": "ac0153d487685e5a179781ccdde3cfad3868e1a7"
+          }
+        },
+        {
           "client_id": "669479875607-i9p8h8mftg96mf3gn3ckmramvetumcs0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
