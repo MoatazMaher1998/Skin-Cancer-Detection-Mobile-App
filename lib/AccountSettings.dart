@@ -1,4 +1,6 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:skin_cancer_app/constants.dart';
@@ -155,23 +157,28 @@ class EditSettingsState extends State<AccountSettings> {
                         textColor: Colors.white,
                         color: Colors.teal,
                         child: Text('Save'),
-                        onPressed: () {
+                        onPressed: () async {
 
                             if (_updateProfileformKey.currentState.validate()) {
                               //updateProfile();
                               debugPrint(
-                                  "SUCCESS + ${emailController.text} + ${nameController.text}  + ${DOBController.text} + $genderController");
+                                  "SUCCESS +$email+ ${nameController.text}  + ${DOBController.text} + $genderController");
                               if (nameController.text == userName && DOBController.text == dateOfBirth && genderController==gender){
                                 print("No changes Happened");
                               }
                               else{
-                                //values has been changed..
-                                updateProfile();
+
+                                var res = EmailAuthProvider.credential(email: email, password: passwordController.text);
+                                FirebaseAuth auth = FirebaseAuth.instance;
+                                try{
+                                  var data = await auth.currentUser.reauthenticateWithCredential(res);
+                                  print("Correct Password has been entered");
+                                  updateProfile();
+                                }catch(e){
+                                  print(e);
+                                }
                               }
                             }
-                          setState(() {
-
-                          });
                         },
                       ),
                     ),
@@ -280,6 +287,7 @@ class EditSettingsState extends State<AccountSettings> {
   String dateOfBirth = "";
   String gender = "";
   String documentId;
+  String email;
   void getNameAndDateAndGender() async {
     bool result = await Userdetails().Userislogged();
     if (result == true) {
@@ -287,6 +295,8 @@ class EditSettingsState extends State<AccountSettings> {
       dateOfBirth = await Userdetails().getdataOfBirth();
       gender = await Userdetails().getGender();
       documentId = await Userdetails().getDocumentId();
+      email = await Userdetails().getEmail();
+
       nameController.text = userName;
       DOBController.text = dateOfBirth;
       genderController = gender;
