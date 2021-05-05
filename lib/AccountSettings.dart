@@ -183,7 +183,7 @@ class EditSettingsState extends State<AccountSettings> {
                                 try{
                                   var data = await auth.currentUser.reauthenticateWithCredential(res);
                                   updateProfile();
-                                  _showMyDialog(context, "Saving");
+                                  _showMyDialog(context, "Saving","Changes saved Successfully ");
                                 }catch(e){
                                   print(e);
                                    showError('Incorrect password');
@@ -272,7 +272,7 @@ class EditSettingsState extends State<AccountSettings> {
                                       var data = await auth.currentUser.reauthenticateWithCredential(res);
                                       print("Correct Password has been entered");
                                       updatePassword();
-                                      _showMyDialog(context, "Saving");
+                                      _showMyDialog(context, "Saving","Password changed Successfully");
                                     }catch(e){
                                       print(e);
                                       showError("Incorrect Password");
@@ -341,7 +341,7 @@ class EditSettingsState extends State<AccountSettings> {
     user.updatePassword(newpasswordController.text);
     print("Password Have beeen changedd");
   }
-  Future<void> _showMyDialog(context, String type) async {
+  Future<void> _showMyDialog(context, String type,String line) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -352,7 +352,7 @@ class EditSettingsState extends State<AccountSettings> {
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text('Changes saved Successfully '),
+                  Text('$line'),
                 ],
               ),
             ),
