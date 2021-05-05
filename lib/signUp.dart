@@ -20,6 +20,7 @@ class SignUp extends StatefulWidget {
 }
 
 class SignupState extends State<SignUp> {
+
   DateTime selectedDate = DateTime.now();
   bool showSpinner = false;
   var _formKey = GlobalKey<FormState>();
@@ -30,7 +31,7 @@ class SignupState extends State<SignUp> {
   TextEditingController confirmPasswordController = TextEditingController();
   // ignore: non_constant_identifier_names
   TextEditingController DOBController = TextEditingController();
-  String genderController;
+  String genderController = "MALE";
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -270,7 +271,7 @@ class SignupState extends State<SignUp> {
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(1925, 1),
-        lastDate: DateTime(2022));
+        lastDate: DateTime(2021));
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;

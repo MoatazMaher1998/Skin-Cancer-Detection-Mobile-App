@@ -171,6 +171,7 @@ class LoginState extends State<LoginScreen> {
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                                 semanticLabel: _obscureText
+
                                     ? "show password"
                                     : 'hide password',
                               ),
