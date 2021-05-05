@@ -1,9 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:skin_cancer_app/FirstScreen.dart';
 import 'package:skin_cancer_app/constants.dart';
+import 'package:skin_cancer_app/upload.dart';
 import 'package:skin_cancer_app/userdetails.dart';
 import 'package:intl/intl.dart';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
@@ -31,7 +32,15 @@ class EditSettingsState extends State<AccountSettings> {
   // ignore: non_constant_identifier_names
   TextEditingController DOBController = TextEditingController();
   String genderController = "MALE";
-  // The way to retrieve the data ....
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  void  showError(String error){
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: new Text(error),
+      duration: new Duration(seconds: 10),
+    ));
+  }
 
   @override
   void initState() {
@@ -42,6 +51,7 @@ class EditSettingsState extends State<AccountSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Account Settings'),
           backgroundColor: Colors.teal,
@@ -162,7 +172,7 @@ class EditSettingsState extends State<AccountSettings> {
                             if (_updateProfileformKey.currentState.validate()) {
                               //updateProfile();
                               debugPrint(
-                                  "SUCCESS +$email+ ${nameController.text}  + ${DOBController.text} + $genderController");
+                                  "SUCCESS + $email + ${nameController.text}  + ${DOBController.text} + $genderController");
                               if (nameController.text == userName && DOBController.text == dateOfBirth && genderController==gender){
                                 print("No changes Happened");
                               }
@@ -172,10 +182,11 @@ class EditSettingsState extends State<AccountSettings> {
                                 FirebaseAuth auth = FirebaseAuth.instance;
                                 try{
                                   var data = await auth.currentUser.reauthenticateWithCredential(res);
-                                  print("Correct Password has been entered");
                                   updateProfile();
+                                  _showMyDialog(context, "Saving");
                                 }catch(e){
                                   print(e);
+                                   showError('Incorrect password');
                                 }
                               }
                             }
@@ -261,8 +272,10 @@ class EditSettingsState extends State<AccountSettings> {
                                       var data = await auth.currentUser.reauthenticateWithCredential(res);
                                       print("Correct Password has been entered");
                                       updatePassword();
+                                      _showMyDialog(context, "Saving");
                                     }catch(e){
                                       print(e);
+                                      showError("Incorrect Password");
                                     }
 
                                 }
@@ -327,5 +340,38 @@ class EditSettingsState extends State<AccountSettings> {
     final user = await Userdetails().getCurrentUser();
     user.updatePassword(newpasswordController.text);
     print("Password Have beeen changedd");
+  }
+  Future<void> _showMyDialog(context, String type) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        if (type == "Saving") {
+          return AlertDialog(
+            title: Text('Notify'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('Changes saved Successfully '),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Proceed'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FirstScreen()),
+                  );
+                },
+              ),
+            ],
+          );
+        }
+      },
+    );
   }
 }
