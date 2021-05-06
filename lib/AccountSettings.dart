@@ -35,7 +35,7 @@ class EditSettingsState extends State<AccountSettings> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  void  showError(String error){
+  void showError(String error) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: new Text(error),
       duration: new Duration(seconds: 10),
@@ -52,11 +52,13 @@ class EditSettingsState extends State<AccountSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text('Account Settings'),
-          backgroundColor: Colors.teal,
-        ),
-        body: ListView(shrinkWrap: true, children: <Widget>[
+      appBar: AppBar(
+        title: Text('Account Settings'),
+        backgroundColor: Colors.teal,
+      ),
+      body: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
           Form(
             key: _updateProfileformKey,
             child: Padding(
@@ -150,9 +152,10 @@ class EditSettingsState extends State<AccountSettings> {
                           "FEMALE",
                         ],
                         buttonTextStyle: ButtonTextStyle(
-                            selectedColor: Colors.white,
-                            unSelectedColor: Colors.black,
-                            textStyle: TextStyle(fontSize: 16)),
+                          selectedColor: Colors.white,
+                          unSelectedColor: Colors.black,
+                          textStyle: TextStyle(fontSize: 16),
+                        ),
                         radioButtonValue: (value) {
                           print(value);
                         },
@@ -168,28 +171,30 @@ class EditSettingsState extends State<AccountSettings> {
                         color: Colors.teal,
                         child: Text('Save'),
                         onPressed: () async {
-
-                            if (_updateProfileformKey.currentState.validate()) {
-                              //updateProfile();
-                              debugPrint(
-                                  "SUCCESS + $email + ${nameController.text}  + ${DOBController.text} + $genderController");
-                              if (nameController.text == userName && DOBController.text == dateOfBirth && genderController==gender){
-                                print("No changes Happened");
-                              }
-                              else{
-
-                                var res = EmailAuthProvider.credential(email: email, password: passwordController.text);
-                                FirebaseAuth auth = FirebaseAuth.instance;
-                                try{
-                                  var data = await auth.currentUser.reauthenticateWithCredential(res);
-                                  updateProfile();
-                                  _showMyDialog(context, "Saving","Changes saved Successfully ");
-                                }catch(e){
-                                  print(e);
-                                   showError('Incorrect password');
-                                }
+                          if (_updateProfileformKey.currentState.validate()) {
+                            debugPrint(
+                                "SUCCESS + $email + ${nameController.text}  + ${DOBController.text} + $genderController");
+                            if (nameController.text == userName &&
+                                DOBController.text == dateOfBirth &&
+                                genderController == gender) {
+                              showError("No changed Happened");
+                            } else {
+                              var res = EmailAuthProvider.credential(
+                                  email: email,
+                                  password: passwordController.text);
+                              FirebaseAuth auth = FirebaseAuth.instance;
+                              try {
+                                await auth.currentUser
+                                    .reauthenticateWithCredential(res);
+                                updateProfile();
+                                _showMyDialog(context,
+                                    "Changes saved Successfully ");
+                              } catch (e) {
+                                print(e);
+                                showError("Error: The password is invalid or the user does not have a password");
                               }
                             }
+                          }
                         },
                       ),
                     ),
@@ -200,111 +205,116 @@ class EditSettingsState extends State<AccountSettings> {
           ),
           Expanded(
             child: Form(
-                key: _updatePWformKey,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Container(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                            child: TextFormField(
-                              controller: oldPasswordController,
-                              obscureText: true,
-                              // ignore: missing_return
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter your old Password';
-                                }
-                              },
-                              decoration: KTextFormField.copyWith(
-                                  labelText: 'Old password'),
-                            ),
+              key: _updatePWformKey,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          child: TextFormField(
+                            controller: oldPasswordController,
+                            obscureText: true,
+                            // ignore: missing_return
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Please enter your old Password';
+                              }
+                            },
+                            decoration: KTextFormField.copyWith(
+                                labelText: 'Old password'),
                           ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                            child: TextFormField(
-                              obscureText: true,
-                              controller: newpasswordController,
-                              // ignore: missing_return
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter your new password';
-                                }
-                              },
-                              decoration: KTextFormField.copyWith(
-                                  labelText: 'New Password'),
-                            ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          child: TextFormField(
+                            obscureText: true,
+                            controller: newpasswordController,
+                            // ignore: missing_return
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Please enter your new password';
+                              }
+                            },
+                            decoration: KTextFormField.copyWith(
+                                labelText: 'New Password'),
                           ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                            child: TextFormField(
-                              obscureText: true,
-                              controller: confirmPasswordController,
-                              // ignore: missing_return
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return 'Please confirm your password';
-                                }
-                                if (value != newpasswordController.text)
-                                  return 'Passwords do not match';
-                              },
-                              decoration: KTextFormField.copyWith(
-                                  labelText: 'Confirm Password'),
-                            ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          child: TextFormField(
+                            obscureText: true,
+                            controller: confirmPasswordController,
+                            // ignore: missing_return
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Please confirm your password';
+                              }
+                              if (value != newpasswordController.text)
+                                return 'Passwords do not match';
+                            },
+                            decoration: KTextFormField.copyWith(
+                                labelText: 'Confirm Password'),
                           ),
-                          Container(
-                            height: 50,
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                            // ignore: deprecated_member_use
-                            child: RaisedButton(
-                              textColor: Colors.white,
-                              color: Colors.teal,
-                              child: Text('Change Password'),
-                              onPressed: () async{
-                                if (_updatePWformKey.currentState.validate()) {
-                                    debugPrint(
-                                        "SUCCESS + ${oldPasswordController.text} + ${confirmPasswordController.text} + ${newpasswordController.text}");
-                                    var res = EmailAuthProvider.credential(email: email, password: oldPasswordController.text.toString());
-                                    FirebaseAuth auth = FirebaseAuth.instance;
-                                    try{
-                                      var data = await auth.currentUser.reauthenticateWithCredential(res);
-                                      print("Correct Password has been entered");
-                                      updatePassword();
-                                      _showMyDialog(context, "Saving","Password changed Successfully");
-                                    }catch(e){
-                                      print(e);
-                                      showError("Incorrect Password");
-                                    }
-
+                        ),
+                        Container(
+                          height: 50,
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          // ignore: deprecated_member_use
+                          child: RaisedButton(
+                            textColor: Colors.white,
+                            color: Colors.teal,
+                            child: Text('Change Password'),
+                            onPressed: () async {
+                              if (_updatePWformKey.currentState.validate()) {
+                                debugPrint(
+                                    "SUCCESS + ${oldPasswordController.text} + ${confirmPasswordController.text} + ${newpasswordController.text}");
+                                var res = EmailAuthProvider.credential(
+                                    email: email,
+                                    password:
+                                        oldPasswordController.text.toString());
+                                FirebaseAuth auth = FirebaseAuth.instance;
+                                try {
+                                  await auth.currentUser
+                                      .reauthenticateWithCredential(res);
+                                  print("Correct Password has been entered");
+                                  updatePassword();
+                                  _showMyDialog(context,"Password changed Successfully");
+                                } catch (e) {
+                                  print(e);
+                                  showError("Error: The password is invalid or the user does not have a password");
                                 }
-
-
-                              },
-                            ),
+                              }
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                )),
+                ),
+              ),
+            ),
           )
-        ]));
+        ],
+      ),
+    );
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        firstDate: DateTime(1930, 8),
+        lastDate: DateTime(2022));
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
       });
     DOBController.text = DateFormat.yMMMd().format(selectedDate);
   }
+
   String userName = "";
   String dateOfBirth = "";
   String gender = "";
@@ -328,25 +338,25 @@ class EditSettingsState extends State<AccountSettings> {
   void updateProfile() async {
     final user = await Userdetails().getCurrentUser();
     user.updateProfile(displayName: nameController.text);
-    await _firestore
-        .collection("Information")
-        .doc(documentId)
-        .update({"Gender": '$genderController',
-    "DataOfBirth": DOBController.text.toString()
+    await _firestore.collection("Information").doc(documentId).update({
+      "Gender": '$genderController',
+      "DataOfBirth": DOBController.text.toString()
     });
     print("DATAA SAVED SUCCEFFULLYY");
   }
-  void updatePassword() async{
+
+  void updatePassword() async {
     final user = await Userdetails().getCurrentUser();
     user.updatePassword(newpasswordController.text);
     print("Password Have beeen changedd");
   }
-  Future<void> _showMyDialog(context, String type,String line) async {
+
+  Future<void> _showMyDialog(context, String line) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
-        if (type == "Saving") {
+
           return AlertDialog(
             title: Text('Notify'),
             content: SingleChildScrollView(
@@ -363,14 +373,13 @@ class EditSettingsState extends State<AccountSettings> {
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => FirstScreen()),
+                    MaterialPageRoute(builder: (context) => FirstScreen()),
                   );
                 },
               ),
             ],
           );
-        }
+
       },
     );
   }
