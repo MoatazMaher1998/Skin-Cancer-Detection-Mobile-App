@@ -42,6 +42,7 @@ dependencies:
   animated_text_kit: ^4.2.1
   image: ^3.0.2
   url_launcher: ^6.0.0-nullsafety
+  font_awesome_flutter: ^9.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,6 +81,12 @@ flutter:
     - family: NewTegomin-Regular
       fonts:
         - asset: fonts/NewTegomin-Regular.ttf
+    - family: githubIcon
+      fonts:
+        - asset: fonts/github.ttf
+    - family: LinkedinIcon
+      fonts:
+          - asset: fonts/LinkedinIcon.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

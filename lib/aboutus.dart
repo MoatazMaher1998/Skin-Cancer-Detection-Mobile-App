@@ -25,11 +25,11 @@ List<Developer> DevelopersList = [
       "Backend & Flutter Developer"),
   Developer(
       "Tarek Osama",
-      "TarekOsama@gmail.com",
-      "Github",
-      "LinkedIn",
+      "Tarekosama1998@gmail.com",
+      "https://github.com/tarekosama126",
+      "https://www.linkedin.com/in/tarek-osama-411756173/",
       "Facebook",
-      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/995810_484478471629400_234129684_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=de6eea&_nc_ohc=kZLsALB7ZioAX9Ixsop&_nc_ht=scontent.faly3-2.fna&oh=ef8a89537d1cc6a4c1eaacf2c0fee18b&oe=60B7475D",
+      "https://scontent-lhr8-1.xx.fbcdn.net/v/t1.6435-9/90117905_3066217290122159_7146900012327239680_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeHelBq9ueg8G1VZjOvb5pRWi7LT1V8xvRCLstPVXzG9EIyqOfpbALy83PocbLoR7sOtY1hhs51G6WF_yzZHCs9M&_nc_ohc=WHOru95B8F0AX_tewmi&_nc_ht=scontent-lhr8-1.xx&oh=3e46288d348f9d775390147f09c6bd50&oe=60BA270A",
       "Machine learning & Firebase"),
   Developer(
       "Ahmed Refaat",
