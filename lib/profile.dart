@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:skin_cancer_app/aboutus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'linkedin_icon_icons.dart';
+import 'github_icons.dart';
 
 class Profile extends StatefulWidget {
   final Developer developer;
@@ -70,7 +72,7 @@ class _ProfileState extends State<Profile> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.code,
+                      LinkedinIcon.linkedin_in,
                       color: Colors.teal.shade900,
                     ),
                     SizedBox(
@@ -98,7 +100,7 @@ class _ProfileState extends State<Profile> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.code,
+                      githubIcon.github,
                       color: Colors.teal.shade900,
                     ),
                     SizedBox(
