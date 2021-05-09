@@ -10,6 +10,7 @@ class Developer {
   final String linkedin;
   final String facebook;
   final String role;
+
   Developer(this.name, this.email, this.github, this.linkedin, this.facebook,
       this.image, this.role);
 }
@@ -33,37 +34,43 @@ List<Developer> DevelopersList = [
       "Machine learning & Firebase"),
   Developer(
       "Ahmed Refaat",
-      "Ahmedrefeat122@gmail.com",
-      "Github",
-      "LinkedIn",
+      "ahmedrefaat0108@gmail.com",
+      "https://github.com/Arefaat18",
+      "https://www.linkedin.com/in/arefaat898/",
       "Facebook",
-      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/10500304_10152137883526525_1504206721351615353_n.jpg?_nc_cat=102&ccb=1-3&_nc_sid=cdbe9c&_nc_ohc=nK80OJsjLRAAX-yTWTh&_nc_ht=scontent.faly3-2.fna&oh=deefc33f1207c8ecd621904dd8d99df3&oe=60B5B1D8",
-      "API's & Flutter Developer"),
+      "https://media-exp1.licdn.com/dms/image/C4D03AQEQ27LlgKbjAg/profile-displayphoto-shrink_800_800/0/1568723547203?e=1626307200&v=beta&t=RakO14yuUNr6nf5d-GdYM0V98b0mY3sbpSKLaJY7ltY",
+      "APIs & Flutter Developer"),
   Developer(
       "Zeyad Mostafa",
-      "ZeyadMoustafa1111@gmail.com",
-      "Github",
-      "LinkedIn",
+      "zyadmostaf@gmail.com",
+      "https://github.com/zeyadmostafa",
+      "https://www.linkedin.com/in/zyad-mostafa-9bba47191",
       "Facebook",
-      "https://scontent.faly3-2.fna.fbcdn.net/v/t31.18172-8/10448611_748231351894858_2653410489194491622_o.jpg?_nc_cat=108&ccb=1-3&_nc_sid=ba80b0&_nc_ohc=ilTVAc90bDgAX-SN8Id&_nc_ht=scontent.faly3-2.fna&oh=b2984456cac7bf8d60a124d1291af9d9&oe=60B46BB2",
+      "https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-9/41273894_2009817632402884_838337041623154688_n.jpg?_nc_cat=111&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=BWqQ2cPsCRwAX8Gfjee&_nc_ht=scontent-hbe1-1.xx&oh=13ab8f05d26adc5755ca080b7a9327df&oe=60BF83E4",
       "Machine learning "),
-  Developer("Mohamed Lotfy", "TarekOsama@gmail.com", "Github", "LinkedIn",
-      "Facebook", "Image", "Machine learning"),
   Developer(
-      "Hossam Moh.",
-      "TarekOsama@gmail.com",
-      "Github",
-      "LinkedIn",
+      "Mohamed Aly Loutfy",
+      "mohamedloutfy97@gmail.com",
+      "https://github.com/MohamedAlyLoutfy",
+      "https://www.linkedin.com/in/mohamed-ali-13b1111b2/",
       "Facebook",
-      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/1546178_763548063673161_36130896_n.jpg?_nc_cat=103&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=C4ENrFVItn4AX_WWEwP&_nc_ht=scontent.faly3-2.fna&oh=0e5d149c30b9e2f210ef366d8bff3bba&oe=60B5E4C5",
+      "https://avatars.githubusercontent.com/u/73834061?v=4",
+      "Machine learning"),
+  Developer(
+      "Hossam Mohamed",
+      "fahmyhossam98@gmail.com",
+      "https://github.com/HossamJr",
+      "https://eg.linkedin.com/in/hossam-fahmy-618461141",
+      "Facebook",
+      "https://media-exp1.licdn.com/dms/image/C4D03AQETEHuLc-g9dg/profile-displayphoto-shrink_800_800/0/1530281685734?e=1626307200&v=beta&t=V1kx9kXYWZwPV-_qd3AENIcKnFQPqE3wIyWS7aWvOFs",
       "Machine learning"),
   Developer(
       "Rashad Sallam",
-      "TarekOsama@gmail.com",
-      "Github",
+      "rashadsallam98@gmail.com",
+      "https://github.com/RashadSallam",
       "LinkedIn",
       "Facebook",
-      "https://scontent.faly3-2.fna.fbcdn.net/v/t1.18169-9/1488665_724760300882349_2098786387_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=cdbe9c&_nc_ohc=YnuV6-ya9igAX-gtZ4n&_nc_ht=scontent.faly3-2.fna&oh=36cd735777548be5594e3093572a847a&oe=60B5EA87",
+      "https://avatars.githubusercontent.com/u/65104512?v=4",
       "Machine learning"),
 ];
 
@@ -173,7 +180,7 @@ class _AboutUs extends State<AboutUs> {
                     ),
                     SizedBox(width: 55),
                     Text(
-                      "Dr. Nayera  \n\nDr. Ahmed ELtarras",
+                      "Dr. Nayera  \n\nDr. Ahmed Eltarras",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     )

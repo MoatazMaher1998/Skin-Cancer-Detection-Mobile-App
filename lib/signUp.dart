@@ -270,8 +270,8 @@ class SignupState extends State<SignUp> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(1925, 1),
-        lastDate: DateTime(2021));
+        firstDate: DateTime(1910, 1),
+        lastDate: DateTime.now());
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;

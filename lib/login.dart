@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:skin_cancer_app/FirstScreen.dart';
+import 'package:skin_cancer_app/googleAuthentication.dart';
 import 'package:skin_cancer_app/userdetails.dart';
 import 'signUp.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -22,54 +23,11 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: [
-    'https://www.googleapis.com/auth/user.birthday.read',
-    'https://www.googleapis.com/auth/user.gender.read'
-  ],
-);
-
 class LoginState extends State<LoginScreen> {
-  Future<List> getGenderandDOB() async {
-    final headers = await _googleSignIn.currentUser.authHeaders;
-    final r = await http.get(
-        Uri.parse(
-            "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays&key="),
-        headers: {"Authorization": headers["Authorization"]});
-    final response = jsonDecode(r.body);
-    String birthdate = response["birthdays"][1]["date"]["day"].toString() +
-        "/" +
-        response["birthdays"][1]["date"]["month"].toString() +
-        "/" +
-        response["birthdays"][1]["date"]["year"].toString();
-    return [response["genders"][0]["formattedValue"], birthdate];
-  }
 
   Future<void> _handleSignIn() async {
     try {
-      GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // Once signed in, return the UserCredential
-      final UserCredential googleUserCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      if (googleUserCredential.additionalUserInfo.isNewUser) {
-        googleUserCredential.user.updateProfile(
-            displayName: googleUserCredential.user.displayName,
-            photoURL: googleUserCredential.user.photoURL);
-        List userData = await getGenderandDOB();
-        await _firestore.collection("Information").add({
-          "DataOfBirth": userData[1],
-          "Gender": userData[0],
-          "email": googleUserCredential.user.email,
-          "result": {},
-        });
-      }
-
+      await googleAuthentication().handleSignIn();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => FirstScreen()),
@@ -78,8 +36,6 @@ class LoginState extends State<LoginScreen> {
       print(error);
     }
   }
-
-//  Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   bool showSpinner = false;
   bool _obscureText = true;
