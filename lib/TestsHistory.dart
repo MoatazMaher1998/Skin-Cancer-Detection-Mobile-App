@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:skin_cancer_app/googleAuthentication.dart';
 import 'package:skin_cancer_app/userdetails.dart';
 import 'AccountSettings.dart';
 import 'main.dart';
+
 
 class Test {
   final String result;
@@ -11,7 +13,6 @@ class Test {
 
   Test({this.imagePath, this.result, this.date});
 }
-
 class TestsHistory extends StatefulWidget {
   @override
   _TestsHistory createState() => _TestsHistory();
@@ -89,7 +90,8 @@ class _TestsHistory extends State<TestsHistory> {
                 }),
             SizedBox(width: 40),
             IconButton(
-              onPressed: () {
+              onPressed: () async{
+                await googleAuthentication().handleSignOut;
                 Userdetails().UserSignOut();
                 Navigator.pop(context);
                 Navigator.push(
@@ -141,67 +143,4 @@ class _TestsHistory extends State<TestsHistory> {
     );
   }
 }
-/*SafeArea(
-child: Column(
-children: [
-Row(
-children: [
-Column(
-children: [
-Container(
-margin:
-EdgeInsets.symmetric(vertical: 35, horizontal: 20),
-height: 35,
-width: 140,
-child: RaisedButton(
-onPressed: () {
-Navigator.pop(context);
-Navigator.push(
-context,
-MaterialPageRoute(
-builder: (context) => AccountSettings()),
-);
-},
-textColor: Colors.white,
-color: Colors.blue.shade900,
-child: Text('Account Settings'),
-),
-),
-],
-),
-Column(
-children: [
-Container(
-margin:
-EdgeInsets.symmetric(vertical: 35, horizontal: 20),
-height: 35,
-width: 140,
-child: RaisedButton(
-onPressed: () async {
-await _auth.signOut();
-Navigator.pop(context);
-Navigator.push(
-context,
-MaterialPageRoute(builder: (context) => MyApp()),
-);
-},
-textColor: Colors.white,
-color: Colors.red.shade900,
-child: Text('Log Out'),
-),
-),
-],
-)
-],
-),
-Row(
-children: [
-Container(
-color: Colors.blue,
-height: 130,
-width: 130,
-)
-],
-)
-],
-),*/
+
