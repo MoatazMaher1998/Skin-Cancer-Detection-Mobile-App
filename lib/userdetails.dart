@@ -26,10 +26,10 @@ class Userdetails {
     var document = await _firestore.collection('Information').get();
     var messages = document.docs;
     for (var message in messages) {
-      var dataEmails = message.data()["email"].toString();
-      if (dataEmails == _loggedInUser.email) {
-        Usermessage = await message;
-        _documentId = await message.id;
+      String dataEmails = message.data()['email'].toString();
+      if (dataEmails.compareTo(_loggedInUser.email)== 0) {
+        Usermessage =  message;
+        _documentId =  message.id;
         break;
       }
     }

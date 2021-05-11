@@ -208,7 +208,7 @@ class SignupState extends State<SignUp> {
                             // ADD New User to Authentication...
                             final newUser =
                                 await _auth.createUserWithEmailAndPassword(
-                                    email: emailController.text,
+                                    email: emailController.text.toLowerCase(),
                                     password: passwordController.text);
                             newUser.user.updateProfile(
                                 displayName: nameController.text, photoURL: "");
@@ -220,7 +220,7 @@ class SignupState extends State<SignUp> {
                               await _firestore.collection("Information").add({
                                 "DataOfBirth": DOBController.text.toString(),
                                 "Gender": genderController,
-                                "email": emailController.text.toString(),
+                                "email": emailController.text.toString().toLowerCase(),
                                 "result": {}
                               });
                               print("Dataa Saved to FireStore SUCESS");
