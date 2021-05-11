@@ -194,7 +194,7 @@ class LoginState extends State<LoginScreen> {
                               });
                               final occurUser =
                                   await _auth.signInWithEmailAndPassword(
-                                      email: emailController.text,
+                                      email: emailController.text.toLowerCase(),
                                       password: passwordController.text);
                               if (occurUser != null) {
                                 //print("User Occur at DataBase");
