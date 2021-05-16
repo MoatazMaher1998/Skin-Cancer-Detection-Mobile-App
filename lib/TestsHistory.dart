@@ -5,7 +5,6 @@ import 'package:skin_cancer_app/userdetails.dart';
 import 'AccountSettings.dart';
 import 'main.dart';
 
-
 class Test {
   final String result;
   final String imagePath;
@@ -13,6 +12,7 @@ class Test {
 
   Test({this.imagePath, this.result, this.date});
 }
+
 class TestsHistory extends StatefulWidget {
   @override
   _TestsHistory createState() => _TestsHistory();
@@ -39,7 +39,7 @@ class _TestsHistory extends State<TestsHistory> {
       String Source = "https://alexunicovidapi.s3-eu-west-1.amazonaws.com/";
       for (MapEntry e in results.entries) {
         var Date = e.value["date"].toString().split(" ")[0];
-        var percentage = "${e.value["percentage"].toString().substring(0, 4)}%";
+        var percentage = "${e.value["percentage"].toString().substring(0, 4)}";
         var image = e.value["Image"].toString();
         email = email.replaceAll("@", "%40");
         String Path = "$Source$email/$image";
@@ -90,7 +90,7 @@ class _TestsHistory extends State<TestsHistory> {
                 }),
             SizedBox(width: 40),
             IconButton(
-              onPressed: () async{
+              onPressed: () async {
                 await googleAuthentication().handleSignOut;
                 Userdetails().UserSignOut();
                 Navigator.pop(context);
@@ -132,8 +132,7 @@ class _TestsHistory extends State<TestsHistory> {
                     fit: BoxFit.fill,
                   ),
                 ),
-                title: Text(
-                    '${dummyHistoryList[index].result} Skin Cancer {type}'),
+                title: Text('${dummyHistoryList[index].result}% Skin Cancer'),
                 trailing: Text('${dummyHistoryList[index].date}'),
               );
             },
@@ -143,4 +142,3 @@ class _TestsHistory extends State<TestsHistory> {
     );
   }
 }
-

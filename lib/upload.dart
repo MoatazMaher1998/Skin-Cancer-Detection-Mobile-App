@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:skin_cancer_app/userdetails.dart';
 import 'dart:convert';
 import 'constants.dart';
@@ -24,13 +25,12 @@ class _UploadState extends State<Upload> {
   final _firestore = FirebaseFirestore.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  GlobalKey<ScaffoldState> showError(String error){
+  GlobalKey<ScaffoldState> showError(String error) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: new Text(error),
       duration: new Duration(seconds: 10),
     ));
   }
-
 
   Future _getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -86,7 +86,7 @@ class _UploadState extends State<Upload> {
     response.stream.transform(utf8.decoder).listen((value) {
       print(value);
       setState(() {
-        result = value;
+        result = value.toString().substring(0, 4);
         showSpinner = false;
         _showMyDialog(context, "result");
         return;
@@ -99,15 +99,47 @@ class _UploadState extends State<Upload> {
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
+        ListBody ResponseView;
         if (type == "result") {
+          if (double.parse(result) > 50) {
+            ResponseView = ListBody(
+              children: <Widget>[
+                Image.asset(
+                  'images/danger.png',
+                  height: 100,
+                  width: 100,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Your Image Has $result% Cancer \n\nPlease Visit The Nearest Hospital',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ],
+            );
+          } else {
+            ResponseView = ListBody(
+              children: <Widget>[
+                Image.asset(
+                  'images/True.jpg',
+                  height: 100,
+                  width: 100,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Your Image Has $result% Cancer \n\nYou Are Okay',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ],
+            );
+          }
           return AlertDialog(
-            title: Text('Your Result is Ready!!!'),
+            title: Center(child: Text('Your Result is Ready')),
             content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('$result'),
-                ],
-              ),
+              child: ResponseView,
             ),
             actions: <Widget>[
               TextButton(
