@@ -180,7 +180,7 @@ class _AboutUs extends State<AboutUs> {
                     ),
                     SizedBox(width: 55),
                     Text(
-                      "Dr. Nayera  \n\nDr. Ahmed Eltarras",
+                      "Dr. Nayera Sadek \n\nDr. Ahmed Eltarras",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     )
